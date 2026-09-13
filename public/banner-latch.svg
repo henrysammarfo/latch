@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="280" viewBox="0 0 1200 280" role="img" aria-label="LATCH hero banner">
+  <defs>
+    <linearGradient id="hbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#07140F"/>
+      <stop offset="55%" stop-color="#0F241A"/>
+      <stop offset="100%" stop-color="#14301F"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="82%" cy="28%" r="52%">
+      <stop offset="0%" stop-color="#7CFFB2" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#7CFFB2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="280" fill="url(#hbg)"/>
+  <rect width="1200" height="280" fill="url(#glow)"/>
+  <!-- latch mark -->
+  <g fill="none" stroke="#7CFFB2" stroke-width="10" stroke-linecap="square">
+    <path d="M72 72 V208"/>
+    <path d="M72 72 H128"/>
+    <path d="M72 208 H128"/>
+    <path d="M168 140 H220"/>
+    <circle cx="236" cy="140" r="10" fill="#7CFFB2" stroke="none"/>
+  </g>
+  <text x="280" y="112" fill="#7CFFB2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" letter-spacing="5">FAIL-CLOSED · MULTI-TENANT · PROOF IDS</text>
+  <text x="280" y="178" fill="#F4F7FA" font-family="Georgia, 'Times New Roman', serif" font-size="56">LATCH</text>
+  <text x="280" y="222" fill="#B7C3D1" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22">Churn-save agents — Slack, Sheets, Calendar, Gmail draft. No silent greens.</text>
+</svg>

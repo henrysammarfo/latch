@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="460" viewBox="0 0 1200 460" role="img" aria-label="LATCH architecture flow">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#07140F"/>
+      <stop offset="100%" stop-color="#12261B"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7CFFB2"/>
+      <stop offset="100%" stop-color="#C8F542"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="460" fill="url(#bg)"/>
+  <text x="48" y="48" fill="#7CFFB2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" letter-spacing="3">LATCH · SAVE PLAY PIPELINE</text>
+  <text x="48" y="92" fill="#F4F7FA" font-family="Georgia, 'Times New Roman', serif" font-size="32">Signal ’ compile ’ policy ’ saga ’ proof</text>
+  <text x="48" y="124" fill="#9AA7B8" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">Workspace agents run fail-closed. Missing IDs ’ UNLATCHED + compensate. Gmail stays draft-only.</text>
+
+  <g font-family="ui-sans-serif, system-ui, sans-serif">
+    <rect x="48" y="170" width="170" height="96" rx="14" fill="#14301F" stroke="#2A4A38"/>
+    <text x="133" y="212" text-anchor="middle" fill="#F4F7FA" font-size="15" font-weight="600">1. Trigger</text>
+    <text x="133" y="236" text-anchor="middle" fill="#9AA7B8" font-size="12">Gmail / Stripe / poke</text>
+
+    <rect x="258" y="170" width="170" height="96" rx="14" fill="#14301F" stroke="#2A4A38"/>
+    <text x="343" y="212" text-anchor="middle" fill="#F4F7FA" font-size="15" font-weight="600">2. RiskCompile</text>
+    <text x="343" y="236" text-anchor="middle" fill="#9AA7B8" font-size="12">account · ARR · evidence</text>
+
+    <rect x="468" y="170" width="170" height="96" rx="14" fill="#14301F" stroke="#2A4A38"/>
+    <text x="553" y="212" text-anchor="middle" fill="#F4F7FA" font-size="15" font-weight="600">3. Policy</text>
+    <text x="553" y="236" text-anchor="middle" fill="#9AA7B8" font-size="12">kill · mode · idempotency</text>
+
+    <rect x="678" y="170" width="170" height="96" rx="14" fill="#1B3A28" stroke="#7CFFB2"/>
+    <text x="763" y="212" text-anchor="middle" fill="#7CFFB2" font-size="15" font-weight="600">4. SavePlay</text>
+    <text x="763" y="236" text-anchor="middle" fill="#9AA7B8" font-size="12">Slack’Sheet’Cal’Draft</text>
+
+    <rect x="888" y="170" width="130" height="96" rx="14" fill="#14301F" stroke="#2A4A38"/>
+    <text x="953" y="212" text-anchor="middle" fill="#F4F7FA" font-size="15" font-weight="600">5. Assert</text>
+    <text x="953" y="236" text-anchor="middle" fill="#9AA7B8" font-size="12">IDs or RED</text>
+
+    <rect x="1058" y="170" width="94" height="96" rx="14" fill="#14301F" stroke="#2A4A38"/>
+    <text x="1105" y="212" text-anchor="middle" fill="#F4F7FA" font-size="15" font-weight="600">6. Board</text>
+    <text x="1105" y="236" text-anchor="middle" fill="#9AA7B8" font-size="12">LATCHED</text>
+  </g>
+
+  <g stroke="url(#signal)" stroke-width="2" fill="none">
+    <path d="M218 218 H258"/>
+    <path d="M428 218 H468"/>
+    <path d="M638 218 H678"/>
+    <path d="M848 218 H888"/>
+    <path d="M1018 218 H1058"/>
+  </g>
+
+  <text x="48" y="320" fill="#7CFFB2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">SIDE EFFECTS (PROOF REQUIRED)</text>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">
+    <rect x="48" y="340" width="250" height="56" rx="12" fill="#0F241A" stroke="#2A4A38"/>
+    <text x="173" y="374" text-anchor="middle" fill="#F4F7FA">Slack #cs · message_ts</text>
+    <rect x="318" y="340" width="250" height="56" rx="12" fill="#0F241A" stroke="#2A4A38"/>
+    <text x="443" y="374" text-anchor="middle" fill="#F4F7FA">Sheets · updatedRange</text>
+    <rect x="588" y="340" width="250" height="56" rx="12" fill="#0F241A" stroke="#2A4A38"/>
+    <text x="713" y="374" text-anchor="middle" fill="#F4F7FA">Calendar · eventId</text>
+    <rect x="858" y="340" width="294" height="56" rx="12" fill="#0F241A" stroke="#2A4A38"/>
+    <text x="1005" y="374" text-anchor="middle" fill="#F4F7FA">Gmail draft · never auto-send</text>
+  </g>
+  <text x="48" y="430" fill="#9AA7B8" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">Deletion / honesty test: wipe proof IDs ’ board cannot stay green. We do not claim unhackable.</text>
+</svg>

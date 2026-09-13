@@ -156,7 +156,7 @@ export const NAV = [
   { to: "/how-it-works", label: "How it works" },
   { to: "/plans", label: "Pricing" },
   { to: "/docs", label: "Docs" },
-  { to: "/login", label: "Sign in" },
+  { to: "/diagrams", label: "Diagrams" },
 ] as const;
 
 export function passRate() {

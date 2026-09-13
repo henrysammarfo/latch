@@ -5,6 +5,8 @@
 
 ## Live product shape
 
+- Diagrams: `/diagrams` Excalidraw viewer (CDN iframe + committed `.excalidraw` / Mermaid sources)
+
 - Marketing: plain-language pages (`/`, `/how-it-works`, `/plans`, `/docs`, `/reliability`, `/contact`)
 - Auth: **email + password only** (`/register`, `/login`) — no Google login for accounts
 - Email verify: optional, later in `/app/settings` (token paste until SMTP)
@@ -15,14 +17,13 @@
 ## Connectors
 
 - Slack: configured (live channel `#cs`)
-- Google: OAuth client + refresh token on Vercel; **still needs Spreadsheet ID**
-- Stripe: pending
+- Google: configured (`oauth+sheet present`) — Spreadsheet ID set on Vercel; live mode still gated by `LATCH_MODE`
+- Stripe: **configured** (test mode secret + webhook secret on Vercel; live mode still gated by LATCH_MODE)
 - AgentRouter LLM: works via Tor on Cursor Cloud
 
-## Blocked on owner (non-secret reply)
+## Next owner credentials
 
-Spreadsheet ID only — see `docs/GOOGLE_SHEET_SETUP.md`  
-Reply with the `<THIS>` from `https://docs.google.com/spreadsheets/d/<THIS>/edit`
+None blocking for Stripe test wiring — next is live mode flip when ready, or SMTP for email verify
 
 ## Security posture
 

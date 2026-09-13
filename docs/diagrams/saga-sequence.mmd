@@ -1,0 +1,30 @@
+%%{init: {"theme":"dark","themeVariables":{"actorBkg":"#1B3A28","actorBorder":"#7CFFB2","actorTextColor":"#F4F7FA","actorLineColor":"#7CFFB2","signalColor":"#7CFFB2","signalTextColor":"#F4F7FA","labelBoxBkgColor":"#14301F","labelBoxBorderColor":"#7CFFB2","labelTextColor":"#F4F7FA","noteBkgColor":"#0F241A","noteTextColor":"#B7C3D1","noteBorderColor":"#9AA7B8","activationBkgColor":"#14301F","activationBorderColor":"#7CFFB2","sequenceNumberColor":"#07140F","fontFamily":"ui-sans-serif, system-ui, sans-serif","fontSize":"15px"}} }%%
+sequenceDiagram
+  autonumber
+  participant Trig as Trigger
+  participant Pol as PolicyEngine
+  participant Slack as Slack
+  participant Sheets as Sheets
+  participant Cal as Calendar
+  participant Gmail as Gmail
+  participant Eval as Asserts
+
+  Trig->>Pol: evidence pack + ARR-at-risk
+  alt deny / kill switch
+    Pol-->>Trig: UNLATCHED (no side-effects)
+  else allow
+    Pol->>Slack: #cs alert
+    Slack-->>Pol: message_ts
+    Pol->>Sheets: OPEN_SAVE row
+    Sheets-->>Pol: updatedRange
+    Pol->>Cal: save-call hold
+    Cal-->>Pol: eventId
+    Pol->>Gmail: create draft (no send)
+    Gmail-->>Pol: draftId
+    Pol->>Eval: prove every ID
+    alt all IDs present
+      Eval-->>Pol: LATCHED
+    else missing ID
+      Eval-->>Pol: UNLATCHED + compensate
+    end
+  end

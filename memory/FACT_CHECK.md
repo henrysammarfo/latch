@@ -51,3 +51,12 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 ## 2026-09-13 — Google configured
 
 - VERIFIED: `/api/health` on latch.tryopal.asia returns Google `configured: true` after Spreadsheet ID env set.
+
+## 2026-09-13 — Stripe + diagrams packaging
+
+| Claim | Result | Evidence | Label |
+| --- | --- | --- | --- |
+| Stripe test secret + webhook secret set on Vercel | Keys added via `vercel env` (sensitive) | `vercel env ls` shows STRIPE_* | VERIFIED |
+| Bundling `@excalidraw/excalidraw` into Nitro SSR 500s production | Confirmed | prod 500 until rollback; server chunk included 4.8MB excalidraw | VERIFIED |
+| CDN iframe viewer keeps Excalidraw off server graph | Build has no `@excalidraw/*` lib chunks | `npm run build` server output | VERIFIED |
+| “Unhackable” | Not claimed | doctrine | VERIFIED |

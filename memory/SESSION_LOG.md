@@ -67,3 +67,11 @@
 - Owner provided Spreadsheet ID `1vRHFoXxRyKbrC8KLk3Or3-EDjTex8-zpdYA9UcsmFIA`.
 - Set `GOOGLE_SHEETS_SPREADSHEET_ID` on Vercel (prod/preview/dev) + local `.env`.
 - Redeployed; `/api/health` Google → `configured: true`, detail `oauth+sheet present`.
+
+## 2026-09-13 — Stripe test keys + Meter README / Excalidraw diagrams
+
+- Stored Stripe test `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PUBLISHABLE_KEY` on Vercel (all envs) + local `.env` (gitignored). Never echoed secrets.
+- Webhook destination already pointed at `/api/public/stripe-webhook` (destination `we_…`).
+- Adopted Meter-style README (badges, honesty table, Mermaid diagrams, architecture SVG).
+- Shipped `/diagrams` with committed `.excalidraw` scenes + Mermaid sources; live Mermaid→Excalidraw via official CDN viewer iframe (avoids bundling Excalidraw into Nitro — that previously 500'd production).
+- Rolled back broken Excalidraw-in-server deploy; redeploy pending to pick up Stripe env + diagrams.

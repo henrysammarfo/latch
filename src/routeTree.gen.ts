@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DiagramsRouteImport } from './routes/diagrams'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
@@ -57,6 +58,11 @@ const ContactRoute = ContactRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiagramsRoute = DiagramsRouteImport.update({
+  id: '/diagrams',
+  path: '/diagrams',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsRoute = DocsRouteImport.update({
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/diagrams': typeof DiagramsRoute
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
@@ -256,6 +263,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/diagrams': typeof DiagramsRoute
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
@@ -293,6 +301,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/diagrams': typeof DiagramsRoute
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
@@ -331,6 +340,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/dashboard'
+    | '/diagrams'
     | '/docs'
     | '/how-it-works'
     | '/login'
@@ -367,6 +377,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/dashboard'
+    | '/diagrams'
     | '/docs'
     | '/how-it-works'
     | '/login'
@@ -403,6 +414,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/dashboard'
+    | '/diagrams'
     | '/docs'
     | '/how-it-works'
     | '/login'
@@ -440,6 +452,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  DiagramsRoute: typeof DiagramsRoute
   DocsRoute: typeof DocsRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
@@ -492,6 +505,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagrams': {
+      id: '/diagrams'
+      path: '/diagrams'
+      fullPath: '/diagrams'
+      preLoaderRoute: typeof DiagramsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs': {
@@ -741,6 +761,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  DiagramsRoute: DiagramsRoute,
   DocsRoute: DocsRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,

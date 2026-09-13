@@ -1,0 +1,19 @@
+%%{init: {"theme":"dark","flowchart":{"curve":"basis","htmlLabels":true},"themeVariables":{"primaryColor":"#1B3A28","primaryTextColor":"#F4F7FA","primaryBorderColor":"#7CFFB2","lineColor":"#7CFFB2","secondaryColor":"#14301F","tertiaryColor":"#0F241A","fontFamily":"ui-sans-serif, system-ui, sans-serif","fontSize":"16px"}} }%%
+flowchart LR
+  classDef core fill:#1B3A28,stroke:#7CFFB2,color:#F4F7FA,stroke-width:2px
+  classDef gate fill:#14301F,stroke:#9AA7B8,color:#F4F7FA,stroke-width:1.5px
+  classDef sink fill:#2A1A14,stroke:#FF8A6A,color:#F4F7FA,stroke-width:2px
+  classDef win fill:#0F3D2A,stroke:#7CFFB2,color:#7CFFB2,stroke-width:2px
+
+  T["Trigger<br/>Gmail · Stripe · poke"]:::gate --> R[RiskCompiler]:::core
+  R --> P[PolicyEngine]:::core
+  P -->|allow| S[SavePlay saga]:::core
+  P -->|deny / kill| X[UNLATCHED]:::sink
+  S --> SL[Slack alert]:::gate
+  SL --> SH[Sheets ledger]:::gate
+  SH --> CA[Calendar hold]:::gate
+  CA --> GM["Gmail draft<br/>(never auto-send)"]:::gate
+  GM --> A[Assert proof IDs]:::core
+  A -->|all green| L[LATCHED]:::win
+  A -->|missing ID| C[Compensate]:::sink
+  C --> X

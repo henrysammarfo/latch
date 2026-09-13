@@ -99,6 +99,7 @@ export function Footer() {
           <div>
             <p className="lx-eyebrow">Build</p>
             <Link to="/docs" className="lx-footer-link">Docs</Link>
+            <Link to="/diagrams" className="lx-footer-link">Diagrams</Link>
             <Link to="/register" className="lx-footer-link">Create workspace</Link>
             <Link to="/app" className="lx-footer-link">App</Link>
           </div>
