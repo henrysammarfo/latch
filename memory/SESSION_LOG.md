@@ -39,3 +39,9 @@
 
 - `SLACK_CS_CHANNEL_ID=C0C2CDTQSL8` (#cs); bot member; `chat.postMessage` returned ok + ts.
 - Next: Google baby-step 1 (Cloud project + enable APIs).
+
+## 2026-09-13 — Vercel + Google OAuth routes
+
+- Created Vercel project latch; seeded env from .env (excl Tor).
+- Added `/api/oauth/google/start` + callback; nitro preset `vercel`.
+- Next: deploy URL, add Google redirect URI, publish consent, connect + Sheet ID, merge main.

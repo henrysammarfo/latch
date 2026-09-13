@@ -28,6 +28,11 @@
 - Slack connector ready for live mode once `LATCH_MODE=live`.
 
 
+## Deploy
+
+- Vercel project `latch` created (`prj_Yu14tThFGUwsOIn8q8prf7uTbNpX`); env seeded (no Tor proxy).
+- Google OAuth start/callback routes added for production redirect.
+
 ## Blocked on owner credentials
 
 See `memory/CREDENTIALS_RUNBOOK.md` — **Slack done**. Next: Google OAuth+Sheet, then Stripe test webhook.
