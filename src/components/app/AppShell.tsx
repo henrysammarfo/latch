@@ -24,6 +24,7 @@ type Me = {
 
 const NAV = [
   { to: "/app", label: "Overview", icon: LayoutDashboard, exact: true },
+  { to: "/app/tour", label: "Tour", icon: Sparkles, exact: true },
   { to: "/app/agents", label: "Agents", icon: Bot },
   { to: "/app/plays", label: "Plays", icon: Activity },
   { to: "/app/connections", label: "Connections", icon: Cable },

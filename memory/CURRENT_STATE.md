@@ -5,6 +5,7 @@
 
 ## Live product shape
 
+- Tour: `/app/tour` click-through (agents → connections → run → force-fail → goldens)
 - Diagrams: `/diagrams` Excalidraw viewer (CDN iframe + committed `.excalidraw` / Mermaid sources)
 
 - Marketing: plain-language pages (`/`, `/how-it-works`, `/plans`, `/docs`, `/reliability`, `/contact`)

@@ -75,3 +75,10 @@
 - Adopted Meter-style README (badges, honesty table, Mermaid diagrams, architecture SVG).
 - Shipped `/diagrams` with committed `.excalidraw` scenes + Mermaid sources; live Mermaid→Excalidraw via official CDN viewer iframe (avoids bundling Excalidraw into Nitro — that previously 500'd production).
 - Rolled back broken Excalidraw-in-server deploy; redeploy pending to pick up Stripe env + diagrams.
+
+## 2026-09-13 — Click-through tour; no VO script in repo
+
+- Removed SUBMIT.md demo VO script per owner.
+- Shipped `/app/tour` interactive click-by-click walkthrough.
+- Agent detail: Run save play + Force Slack fail wired to `/api/latch/run`.
+- Merging to main.

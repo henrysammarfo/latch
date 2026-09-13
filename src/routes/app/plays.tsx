@@ -24,7 +24,7 @@ function PlaysPage() {
   const [busy, setBusy] = useState(false);
 
   const loadHistory = useCallback(async () => {
-    const res = await fetch("/api/latch/plays");
+    const res = await fetch("/api/latch/plays", { credentials: "include" });
     const json = await res.json();
     if (json.ok) setHistory(json.plays || []);
   }, []);
@@ -35,6 +35,7 @@ function PlaysPage() {
       try {
         const res = await fetch("/api/latch/run", {
           method: "POST",
+          credentials: "include",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ injectFail, forceNew: true }),
         });

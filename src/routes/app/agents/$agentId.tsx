@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app/AppShell";
@@ -20,6 +20,13 @@ function AgentDetailPage() {
   const { agentId } = Route.useParams();
   const [agent, setAgent] = useState<Agent | null>(null);
   const [busy, setBusy] = useState(false);
+  const [runBusy, setRunBusy] = useState(false);
+  const [lastPlay, setLastPlay] = useState<{
+    id: string;
+    state: string;
+    greenCount: number;
+    assertTotal: number;
+  } | null>(null);
 
   async function load() {
     const res = await fetch(`/api/workspace/agents/${agentId}`, { credentials: "include" });
@@ -52,6 +59,31 @@ function AgentDetailPage() {
     }
   }
 
+  async function runSavePlay(injectFail: string | null = null) {
+    setRunBusy(true);
+    try {
+      const res = await fetch("/api/latch/run", {
+        method: "POST",
+        credentials: "include",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ injectFail, forceNew: true, agentId }),
+      });
+      const json = await res.json();
+      if (!json.ok || !json.play) throw new Error(json.error || "Run failed");
+      setLastPlay({
+        id: json.play.id,
+        state: json.play.state,
+        greenCount: json.play.greenCount,
+        assertTotal: json.play.assertTotal,
+      });
+      toast.success(json.play.state === "LATCHED" ? "Save play latched" : "Play finished");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setRunBusy(false);
+    }
+  }
+
   if (!agent) {
     return (
       <AppShell title="Agent" subtitle="Loading…">
@@ -62,6 +94,44 @@ function AgentDetailPage() {
 
   return (
     <AppShell title={agent.name} subtitle={agent.purpose}>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          disabled={runBusy || agent.status === "paused"}
+          onClick={() => void runSavePlay(null)}
+          className="rounded-xl bg-[oklch(0.28_0.05_145)] px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
+        >
+          {runBusy ? "Running…" : "Run save play"}
+        </button>
+        <button
+          type="button"
+          disabled={runBusy}
+          onClick={() => void runSavePlay("slack_alert")}
+          className="rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-medium disabled:opacity-60"
+        >
+          Force Slack fail
+        </button>
+        <Link
+          to="/app/plays"
+          className="rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-medium"
+        >
+          Open Plays
+        </Link>
+        <Link
+          to="/app/tour"
+          className="rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-medium"
+        >
+          Tour
+        </Link>
+      </div>
+
+      {lastPlay ? (
+        <div className="mb-4 rounded-2xl border border-black/8 bg-white px-5 py-4 text-sm">
+          Last run <span className="font-mono text-xs">{lastPlay.id}</span> →{" "}
+          <strong>{lastPlay.state}</strong> · {lastPlay.greenCount}/{lastPlay.assertTotal} asserts
+        </div>
+      ) : null}
+
       <div className="grid max-w-2xl gap-4 rounded-2xl border border-black/8 bg-white p-5">
         <label className="grid gap-1 text-sm">
           Name
@@ -91,7 +161,7 @@ function AgentDetailPage() {
             <option value="paused">Paused</option>
           </select>
         </label>
-        <p className="text-sm text-black/55">Triggers: {agent.triggers.join(", ")}</p>
+        <p className="text-sm text-black/55">Triggers: {agent.triggers.join(", ") || "—"}</p>
         <button
           type="button"
           disabled={busy}

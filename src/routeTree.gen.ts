@@ -28,6 +28,7 @@ import { Route as AppConnectionsRouteImport } from './routes/app/connections'
 import { Route as AppEvalsRouteImport } from './routes/app/evals'
 import { Route as AppPlaysRouteImport } from './routes/app/plays'
 import { Route as AppSettingsRouteImport } from './routes/app/settings'
+import { Route as AppTourRouteImport } from './routes/app/tour'
 import { Route as DashboardEvalsRouteImport } from './routes/dashboard/evals'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
 import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
@@ -140,6 +141,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/app/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTourRoute = AppTourRouteImport.update({
+  id: '/app/tour',
+  path: '/app/tour',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardEvalsRoute = DashboardEvalsRouteImport.update({
   id: '/evals',
   path: '/evals',
@@ -241,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/app/evals': typeof AppEvalsRoute
   '/app/plays': typeof AppPlaysRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/tour': typeof AppTourRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
   '/app/': typeof AppIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
@@ -278,6 +285,7 @@ export interface FileRoutesByTo {
   '/app/evals': typeof AppEvalsRoute
   '/app/plays': typeof AppPlaysRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/tour': typeof AppTourRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
   '/app': typeof AppIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/app/evals': typeof AppEvalsRoute
   '/app/plays': typeof AppPlaysRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/tour': typeof AppTourRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
   '/app/': typeof AppIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
@@ -355,6 +364,7 @@ export interface FileRouteTypes {
     | '/app/evals'
     | '/app/plays'
     | '/app/settings'
+    | '/app/tour'
     | '/dashboard/evals'
     | '/app/'
     | '/api/auth/login'
@@ -392,6 +402,7 @@ export interface FileRouteTypes {
     | '/app/evals'
     | '/app/plays'
     | '/app/settings'
+    | '/app/tour'
     | '/dashboard/evals'
     | '/app'
     | '/api/auth/login'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
     | '/app/evals'
     | '/app/plays'
     | '/app/settings'
+    | '/app/tour'
     | '/dashboard/evals'
     | '/app/'
     | '/api/auth/login'
@@ -467,6 +479,7 @@ export interface RootRouteChildren {
   AppEvalsRoute: typeof AppEvalsRoute
   AppPlaysRoute: typeof AppPlaysRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppTourRoute: typeof AppTourRoute
   AppIndexRoute: typeof AppIndexRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
@@ -617,6 +630,13 @@ declare module '@tanstack/react-router' {
       path: '/app/settings'
       fullPath: '/app/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/tour': {
+      id: '/app/tour'
+      path: '/app/tour'
+      fullPath: '/app/tour'
+      preLoaderRoute: typeof AppTourRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/evals': {
@@ -776,6 +796,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppEvalsRoute: AppEvalsRoute,
   AppPlaysRoute: AppPlaysRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppTourRoute: AppTourRoute,
   AppIndexRoute: AppIndexRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
@@ -795,13 +816,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

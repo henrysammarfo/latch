@@ -29,7 +29,7 @@ function AppHome() {
     void fetch("/api/health")
       .then((r) => r.json())
       .then((j) => setHealth(j));
-    void fetch("/api/latch/plays")
+    void fetch("/api/latch/plays", { credentials: "include" })
       .then((r) => r.json())
       .then((j) => j.ok && setPlayCount((j.plays || []).length));
   }, []);
@@ -70,10 +70,23 @@ function AppHome() {
         )}
       </section>
 
+      <section className="mt-4 rounded-2xl border border-[oklch(0.45_0.12_145)]/30 bg-[oklch(0.97_0.02_145)] p-5">
+        <p className="text-sm font-semibold">Click-through tour</p>
+        <p className="mt-1 text-sm text-black/60">
+          Step-by-step buttons for agents → connections → run play → force fail → goldens.
+        </p>
+        <Link
+          to="/app/tour"
+          className="mt-3 inline-flex rounded-xl bg-[oklch(0.28_0.05_145)] px-4 py-2 text-sm font-medium text-white"
+        >
+          Open tour →
+        </Link>
+      </section>
+
       <section className="mt-4 grid gap-3 md:grid-cols-3">
-        <QuickLink to="/app/connections" title="Connect tools" body="Slack, Google Sheet, Calendar, Gmail drafts, Stripe." />
+        <QuickLink to="/app/agents" title="Agents" body="Create and run save plays from each agent." />
         <QuickLink to="/app/plays" title="Run a save play" body="See every step and the proof IDs — or the rollback." />
-        <QuickLink to="/app/settings" title="Profile & email" body="Verify email later. Not required to explore." />
+        <QuickLink to="/app/connections" title="Connect tools" body="Slack, Google Sheet, Calendar, Gmail drafts, Stripe." />
       </section>
     </AppShell>
   );
@@ -94,7 +107,7 @@ function QuickLink({
   title,
   body,
 }: {
-  to: "/app/connections" | "/app/plays" | "/app/settings";
+  to: "/app/agents" | "/app/connections" | "/app/plays" | "/app/settings" | "/app/tour";
   title: string;
   body: string;
 }) {
