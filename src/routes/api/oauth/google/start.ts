@@ -10,12 +10,19 @@ const SCOPES = [
   "https://www.googleapis.com/auth/calendar.events",
 ];
 
+function publicOrigin(request: Request): string {
+  const xfHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+  const host = xfHost || request.headers.get("host") || new URL(request.url).host;
+  const xfProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
+  const proto = xfProto || (host.includes("localhost") || host.startsWith("127.") ? "http" : "https");
+  return `${proto}://${host}`;
+}
+
 function redirectUri(request: Request): string {
   loadEnv({ force: true });
   const configured = getEnv("GOOGLE_REDIRECT_URI");
   if (configured) return configured;
-  const url = new URL(request.url);
-  return `${url.origin}/api/oauth/google/callback`;
+  return `${publicOrigin(request)}/api/oauth/google/callback`;
 }
 
 export const Route = createFileRoute("/api/oauth/google/start")({
