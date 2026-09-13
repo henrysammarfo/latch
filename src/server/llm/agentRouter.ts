@@ -1,5 +1,14 @@
-import { socksDispatcher } from "fetch-socks";
-import { ProxyAgent, fetch as undiciFetch, type Dispatcher, type RequestInit as UndiciInit } from "undici";
+/**
+ * AgentRouter client — Cursor Cloud fail-closed path.
+ * - Base ONLY https://agentrouter.org/v1 (never co.agentrouter.org)
+ * - Force-load .env so stale process env cannot win
+ * - Tor socks5h://127.0.0.1:9050 via node-fetch + socks-proxy-agent
+ *   (Bun/undici native fetch ignores SOCKS agents → WAF HTML)
+ * Never logs API keys.
+ */
+import fetch from "node-fetch";
+import { SocksProxyAgent } from "socks-proxy-agent";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 import { firstEnv, getEnv, loadEnv } from "../env/loadEnv";
 
@@ -12,6 +21,7 @@ export type SmokeFail = {
 };
 
 function apiKey(): string {
+  // override:true — always re-read gitignored .env so stale process env cannot win
   loadEnv({ force: true });
   const k = firstEnv("AGENTROUTER_API_KEY", "AGENT_ROUTER_API_KEY");
   if (!k) throw new Error("LATCH_ENV_MISSING: AGENTROUTER_API_KEY");
@@ -36,20 +46,11 @@ function proxyUrl(): string | undefined {
   return firstEnv("AGENT_ROUTER_HTTP_PROXY", "AGENTROUTER_HTTP_PROXY", "HTTPS_PROXY");
 }
 
-function buildDispatcher(): Dispatcher | undefined {
+function buildAgent(): SocksProxyAgent | HttpsProxyAgent<string> | undefined {
   const p = proxyUrl();
   if (!p) return undefined;
-  if (p.startsWith("socks")) {
-    // socks5h://127.0.0.1:9050
-    const u = new URL(p);
-    const type = p.startsWith("socks5") ? 5 : 4;
-    return socksDispatcher({
-      type: type as 4 | 5,
-      host: u.hostname,
-      port: Number(u.port || 9050),
-    }) as unknown as Dispatcher;
-  }
-  return new ProxyAgent(p);
+  if (p.startsWith("socks")) return new SocksProxyAgent(p);
+  return new HttpsProxyAgent(p);
 }
 
 function wireHeaders(key: string): Record<string, string> {
@@ -69,15 +70,21 @@ function wireHeaders(key: string): Record<string, string> {
   };
 }
 
-async function agentFetch(path: string, init?: UndiciInit): Promise<Response> {
+async function agentFetch(path: string, init?: { method?: string; body?: string }): Promise<{
+  status: number;
+  text: string;
+}> {
   const key = apiKey();
   const url = `${agentRouterBaseUrl()}${path.startsWith("/") ? path : `/${path}`}`;
-  const res = await undiciFetch(url, {
-    ...init,
-    headers: { ...wireHeaders(key), ...(init?.headers as Record<string, string> | undefined) },
-    dispatcher: buildDispatcher() as never,
+  const agent = buildAgent();
+  const res = await fetch(url, {
+    method: init?.method ?? "GET",
+    body: init?.body,
+    headers: wireHeaders(key),
+    agent: agent as never,
   });
-  return res as unknown as Response;
+  const text = await res.text();
+  return { status: res.status, text };
 }
 
 function triage(status: number, body: string): SmokeFail["triage"] {
@@ -102,7 +109,7 @@ export async function smokeAgentRouter(): Promise<SmokeOk | SmokeFail> {
   loadEnv({ force: true });
   const model = modelName();
   try {
-    const res = await agentFetch("/chat/completions", {
+    const { status, text } = await agentFetch("/chat/completions", {
       method: "POST",
       body: JSON.stringify({
         model,
@@ -110,24 +117,18 @@ export async function smokeAgentRouter(): Promise<SmokeOk | SmokeFail> {
         messages: [{ role: "user", content: 'Reply with exactly: {"pong":true}' }],
       }),
     });
-    const text = await res.text();
-    if (!res.ok) {
-      return {
-        ok: false,
-        triage: triage(res.status, text),
-        status: res.status,
-        message: `HTTP ${res.status}`,
-      };
+    if (status < 200 || status >= 300) {
+      return { ok: false, triage: triage(status, text), status, message: `HTTP ${status}` };
     }
     if (text.includes("aliyun_waf") || text.trim().startsWith("<!doctype")) {
-      return { ok: false, triage: "A", status: res.status, message: "WAF HTML" };
+      return { ok: false, triage: "A", status, message: "WAF HTML" };
     }
     try {
       JSON.parse(text);
     } catch {
-      return { ok: false, triage: "E", status: res.status, message: "Non-JSON" };
+      return { ok: false, triage: "E", status, message: "Non-JSON" };
     }
-    return { ok: true, model, status: res.status };
+    return { ok: true, model, status };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     const t: SmokeFail["triage"] =
@@ -138,13 +139,14 @@ export async function smokeAgentRouter(): Promise<SmokeOk | SmokeFail> {
   }
 }
 
+/** Draft-only. Asserts MUST NOT depend on this string. Fail-closed. */
 export async function draftRiskReason(input: {
   accountName: string;
   arrAtRiskUsd: number;
   signalSummary: string;
 }): Promise<string> {
   const model = modelName();
-  const res = await agentFetch("/chat/completions", {
+  const { status, text } = await agentFetch("/chat/completions", {
     method: "POST",
     body: JSON.stringify({
       model,
@@ -161,8 +163,9 @@ export async function draftRiskReason(input: {
       ],
     }),
   });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`LATCH_LLM_FAIL triage=${triage(res.status, text)} status=${res.status}`);
+  if (status < 200 || status >= 300) {
+    throw new Error(`LATCH_LLM_FAIL triage=${triage(status, text)} status=${status}`);
+  }
   if (text.includes("aliyun_waf") || text.trim().startsWith("<!doctype")) {
     throw new Error("LATCH_LLM_FAIL triage=A — start Tor SOCKS");
   }

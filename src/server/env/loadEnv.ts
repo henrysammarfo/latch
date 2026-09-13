@@ -21,9 +21,10 @@ function parseEnvFile(contents: string): Record<string, string> {
   return out;
 }
 
-export function loadEnv(options?: { force?: boolean }): void {
+export function loadEnv(options?: { force?: boolean; override?: boolean }): void {
   const path = resolve(process.cwd(), ".env");
-  if (!options?.force && loadedFrom === path) return;
+  const force = Boolean(options?.force || options?.override);
+  if (!force && loadedFrom === path) return;
   if (existsSync(path)) {
     for (const [k, v] of Object.entries(parseEnvFile(readFileSync(path, "utf8")))) {
       process.env[k] = v;

@@ -45,7 +45,7 @@ function ensureTor(): void {
 }
 
 async function main() {
-  loadEnv({ force: true });
+  loadEnv({ force: true, override: true });
   ensureTor();
   const result = await smokeAgentRouter();
   if (result.ok) {

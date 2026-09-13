@@ -30,3 +30,11 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 | Fix is off-repo (mint new token / Discord support) — do not fake LLM success | Policy | Owner FINAL PROMPT triage C | VERIFIED |
 | Goldens G1–G4 pass in dry_run | Confirmed | `npm run eval:goldens` | VERIFIED |
 | `npm run build` + `npm run typecheck` clean | Confirmed | this session | VERIFIED |
+
+## 2026-09-13 — AgentRouter node-fetch + socks-proxy-agent
+
+| Claim | Result | Label |
+| --- | --- | --- |
+| undici/Bun fetch ignores SOCKS → WAF HTML on Cloud | Prior session | VERIFIED |
+| node-fetch + socks-proxy-agent via Tor reaches AgentRouter JSON | Smoke returns HTTP 401 JSON triage C (not WAF) | VERIFIED |
+| Key `sk-jiQJ…` still `unauthorized_client` over Tor | Smoke triage C | VERIFIED — mint fresh token off-repo |
