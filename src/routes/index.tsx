@@ -1,76 +1,72 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight, CalendarCheck2, CircleSlash2, FileSpreadsheet, Fingerprint, MessageSquareDot, ShieldCheck, Siren, Timer } from "lucide-react";
+import { ArrowUpRight, Bot, ShieldCheck, Sparkles, Workflow } from "lucide-react";
 import heroImage from "@/assets/latch-hero.jpg";
 import { CurvedLines } from "@/components/latch/CurvedLines";
 import { Marquee } from "@/components/latch/Marquee";
 import { SitePage } from "@/components/latch/SiteChrome";
-import { GOLDEN, PLAYS, TICKER, TRUSTED, passRate } from "@/lib/latch-data";
+import { TICKER, TRUSTED } from "@/lib/latch-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Latch — Fail-closed churn-save for B2B SaaS" },
+      { title: "Latch — Churn-save agents for customer teams" },
       {
         name: "description",
         content:
-          "Latch runs a churn-save play across Slack, your CRM and calendar, then proves every app moved with real IDs. No proof, no green.",
+          "Create a workspace, add agents, and let Latch run save plays across Slack, Sheets, Calendar, and Gmail drafts — with proof on every step.",
       },
-      { property: "og:title", content: "Latch — Fail-closed churn-save for B2B SaaS" },
-      {
-        property: "og:description",
-        content:
-          "One risk signal in, three verified side effects out. Latch only greens when Slack, the risk ledger and the calendar all returned an ID.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Landing,
 });
 
-const PIPELINE = [
-  { icon: Siren, title: "Signal", body: "Cancel language in Gmail, or a Stripe past_due / cancel webhook.", tag: "trigger" },
-  { icon: MessageSquareDot, title: "Alert", body: "Slack #cs gets the account, the reason and the thread link.", tag: "slack.message_ts" },
-  { icon: FileSpreadsheet, title: "Ledger", body: "Risk row opens with status OPEN_SAVE and the owning CSM.", tag: "sheets.updatedRange" },
-  { icon: CalendarCheck2, title: "Hold", body: "Save call blocked on the owner's calendar inside the risk window.", tag: "calendar.eventId" },
+const STEPS = [
+  {
+    icon: Sparkles,
+    title: "Create a workspace",
+    body: "Sign up with email. Invite comes later. You can verify your email in Settings when you are ready.",
+  },
+  {
+    icon: Bot,
+    title: "Add agents",
+    body: "Each agent watches for churn signals you care about — cancel language, failed payments, quiet accounts.",
+  },
+  {
+    icon: Workflow,
+    title: "Run a save play",
+    body: "Latch alerts Slack, writes the risk ledger, books a hold, and leaves a Gmail draft. No silent customer sends.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Keep the proof",
+    body: "Every step stores a real ID. If something fails, Latch stops and rolls back what it can. The board stays honest.",
+  },
 ];
 
 function Landing() {
-  const latched = PLAYS.filter((p) => p.state === "LATCHED").length;
-
   return (
     <SitePage>
-      <section
-        className="lx-hero"
-        style={{ ["--lx-hero-image" as string]: `url(${heroImage})` }}
-      >
+      <section className="lx-hero" style={{ ["--lx-hero-image" as string]: `url(${heroImage})` }}>
         <CurvedLines />
         <Marquee items={TICKER} />
         <h1 className="lx-h1 lx-hero-title">
-          Churn saves that <span className="lx-serif">prove</span>
-          <span className="lx-reg">®</span> themselves.
+          Churn-save agents your whole <span className="lx-serif">team</span> can run.
         </h1>
         <p className="lx-body lx-hero-sub">
-          When an account looks ready to leave, Latch runs the save play across
-          Slack, your risk ledger and the calendar — and only turns green when
-          every app hands back a real ID.
+          Latch is a workspace for customer teams. Create agents that catch risk early, take the
+          next steps in your tools, and show clear proof — without making you fight a demo login.
         </p>
         <div className="lx-cta-row">
-          <Link to="/dashboard" className="lx-btn-primary">
-            See a live latch
+          <Link to="/register" className="lx-btn-primary">
+            Start free
             <ArrowUpRight size={18} />
           </Link>
-          <Link to="/contact" className="lx-btn-book">
-            <span className="lx-avatar" style={{ background: "var(--lx-text)", display: "grid", placeItems: "center", color: "var(--lx-bg)", fontWeight: 600, fontSize: 15 }}>
-              H
-            </span>
+          <Link to="/how-it-works" className="lx-btn-book">
             <span style={{ textAlign: "left" }}>
               <span className="lx-btn-book-title" style={{ display: "block" }}>
-                Chat for 15 minutes
+                See how it works
               </span>
-              <span className="lx-btn-book-sub">
-                <span className="lx-dot" /> Pick a slot
-              </span>
+              <span className="lx-btn-book-sub">Plain steps. No jargon wall.</span>
             </span>
           </Link>
         </div>
@@ -79,36 +75,32 @@ function Landing() {
 
       <section className="lx-shell" style={{ paddingBottom: 24 }}>
         <div style={{ display: "flex", gap: 32, alignItems: "center", flexWrap: "wrap" }}>
-          <p className="lx-small" style={{ maxWidth: 163, fontWeight: 500 }}>
-            Moves the tools your CS team already lives in
+          <p className="lx-small" style={{ maxWidth: 180, fontWeight: 500 }}>
+            Works with the tools you already use
           </p>
           <div style={{ flex: 1, minWidth: 240 }}>
-            <Marquee
-              items={TRUSTED}
-              wide
-              render={(item) => <span className="lx-logo-word">{item}</span>}
-            />
+            <Marquee items={TRUSTED} wide render={(item) => <span className="lx-logo-word">{item}</span>} />
           </div>
         </div>
       </section>
 
       <section className="lx-section lx-shell">
-        <p className="lx-eyebrow">The save play</p>
+        <p className="lx-eyebrow">Simple path</p>
         <h2 className="lx-h2" style={{ maxWidth: 640, marginTop: 16 }}>
-          One signal in. Three <span className="lx-serif">verified</span> side
-          effects out.
+          From signup to a live agent in four clear moves.
         </h2>
         <div className="lx-grid-4" style={{ marginTop: 40 }}>
-          {PIPELINE.map((step, i) => (
+          {STEPS.map((step, i) => (
             <div className="lx-card" key={step.title}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <step.icon size={20} strokeWidth={1.6} />
                 <span className="lx-kv">0{i + 1}</span>
               </div>
-              <h3 className="lx-h3" style={{ marginTop: 20 }}>{step.title}</h3>
-              <p className="lx-small" style={{ marginTop: 8 }}>{step.body}</p>
-              <p className="lx-mono" style={{ marginTop: 16, color: "var(--lx-faint)" }}>
-                {step.tag}
+              <h3 className="lx-h3" style={{ marginTop: 20 }}>
+                {step.title}
+              </h3>
+              <p className="lx-small" style={{ marginTop: 8 }}>
+                {step.body}
               </p>
             </div>
           ))}
@@ -118,77 +110,36 @@ function Landing() {
       <section className="lx-section lx-shell">
         <div className="lx-grid-2" style={{ alignItems: "center", gap: 48 }}>
           <div>
-            <p className="lx-eyebrow">Fail-closed by default</p>
+            <p className="lx-eyebrow">Built for teams</p>
             <h2 className="lx-h2" style={{ marginTop: 16 }}>
-              A missing ID is a <span className="lx-serif">red</span> board, not a
-              rounded-up win.
+              Your workspace. Your agents. Your proof.
             </h2>
-            <p className="lx-body" style={{ marginTop: 18 }}>
-              Most agents report what they intended to do. Latch reports what the
-              apps actually returned. Kill the Slack token mid-run and the board
-              flips to UNLATCHED, writes a FAILED_NOTIFY row and stops the rest of
-              the play.
+            <p className="lx-body" style={{ marginTop: 16 }}>
+              Judges and operators get a real product path: email signup, a clean dashboard, and
+              agents you can create without waiting on OAuth for your login. Tool connections
+              (Slack, Google, Stripe) stay on the workspace — separate from how you sign in.
             </p>
-            <div style={{ display: "flex", gap: 12, marginTop: 26, flexWrap: "wrap" }}>
-              <Link to="/reliability" className="lx-pill">
-                Reliability brief <ArrowUpRight size={16} />
+            <div className="lx-cta-row" style={{ marginTop: 28 }}>
+              <Link to="/register" className="lx-btn-primary">
+                Create workspace
+                <ArrowUpRight size={18} />
               </Link>
-              <Link to="/how-it-works" className="lx-pill-ghost">Read the architecture</Link>
+              <Link to="/login" className="lx-btn-secondary">
+                Sign in
+              </Link>
             </div>
           </div>
-          <div className="lx-card">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span className="lx-badge lx-badge-red">
-                <CircleSlash2 size={13} /> UNLATCHED
-              </span>
-              <span className="lx-kv">play_7bd004 · Halcyon Retail</span>
-            </div>
-            <pre className="lx-code" style={{ marginTop: 18 }}>{`assert stripe.event.id      evt_1PxT9k   PASS
-assert slack.message_ts     —            FAIL  invalid_auth (3 retries)
-assert sheets.updatedRange  Risk!A41:H41 PASS  FAILED_NOTIFY
-assert calendar.eventId     —            SKIP  halted: fail-closed
-assert no_silent_send       —            SKIP
-
-board: 2/5 → RED`}</pre>
-          </div>
-        </div>
-      </section>
-
-      <section className="lx-section lx-shell">
-        <div className="lx-grid-3">
-          {[
-            { icon: ShieldCheck, k: `${passRate()}%`, v: `Golden jobs matching expected outcome (${GOLDEN.length} fixtures)` },
-            { icon: Fingerprint, k: `${latched}/${PLAYS.length}`, v: "Plays latched today, each with side-effect IDs on record" },
-            { icon: Timer, k: "1.6s", v: "Median signal-to-latch across Slack, ledger and calendar" },
-          ].map((s) => (
-            <div className="lx-card lx-card-soft" key={s.k}>
-              <s.icon size={20} strokeWidth={1.6} />
-              <p className="lx-stat-num" style={{ marginTop: 16 }}>{s.k}</p>
-              <p className="lx-small" style={{ marginTop: 6 }}>{s.v}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="lx-shell" style={{ paddingBottom: 96 }}>
-        <div
-          className="lx-card"
-          style={{ padding: 56, textAlign: "center", background: "var(--lx-surface)", borderColor: "transparent" }}
-        >
-          <h2 className="lx-h2" style={{ maxWidth: 560, margin: "0 auto" }}>
-            Latch the save. Keep the <span className="lx-serif">proof</span>.
-          </h2>
-          <p className="lx-body" style={{ maxWidth: 480, margin: "16px auto 0" }}>
-            Human stays on every customer-facing send. Latch handles the internal
-            work and the audit trail.
-          </p>
-          <div className="lx-cta-row" style={{ marginTop: 28 }}>
-            <Link to="/dashboard" className="lx-btn-primary">
-              Open the console <ArrowUpRight size={18} />
-            </Link>
-            <Link to="/plans" className="lx-pill-ghost" style={{ height: 56, padding: "0 26px" }}>
-              Compare plans
-            </Link>
+          <div className="lx-card" style={{ padding: 28 }}>
+            <p className="lx-small" style={{ fontWeight: 600 }}>
+              What you get in the app
+            </p>
+            <ul className="lx-body" style={{ marginTop: 14, paddingLeft: 18, display: "grid", gap: 10 }}>
+              <li>Overview of agents and connection health</li>
+              <li>Agent list with create / open / pause</li>
+              <li>Play runner with step-by-step IDs</li>
+              <li>Evals board for golden checks</li>
+              <li>Settings with “verify email later”</li>
+            </ul>
           </div>
         </div>
       </section>

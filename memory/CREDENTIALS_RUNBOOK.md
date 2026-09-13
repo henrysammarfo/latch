@@ -48,12 +48,15 @@ Fill keys below as you mint them. Research keys (Tavily / TinyFish / AgentRouter
    - Type: **Web application**
    - Redirect URIs: `http://localhost:3000/api/oauth/google/callback` (+ your deploy URL later)
    - Copy → `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
-5. Create a Sheet named **LATCH Risk Ledger** with header row:
-   `run_id | account | arr_at_risk | status | slack_ts | sheet_range | cal_event_id | gmail_draft_id | updated_at`
-   - Copy Spreadsheet ID from URL → `GOOGLE_SHEETS_SPREADSHEET_ID`
-6. Run the in-app Google OAuth link (once dashboard is up) → stores `GOOGLE_REFRESH_TOKEN`.
+5. **Create the risk ledger Sheet** (exact clicks — also in `docs/GOOGLE_SHEET_SETUP.md`):
+   1. Open [sheets.google.com](https://sheets.google.com) as the **same Google account** used for OAuth.
+   2. **Blank spreadsheet** → rename to **`LATCH Risk Ledger`**.
+   3. Row 1 headers (A–I), tab-separated:  
+      `run_id | account | arr_at_risk | status | slack_ts | sheet_range | cal_event_id | gmail_draft_id | updated_at`
+   4. From the URL `https://docs.google.com/spreadsheets/d/<THIS>/edit`, copy **only** `<THIS>` → `GOOGLE_SHEETS_SPREADSHEET_ID` (Vercel env + redeploy).
+6. Refresh token: already minted via `/api/oauth/google/start` on `latch.tryopal.asia` → `GOOGLE_REFRESH_TOKEN` on Vercel.
 
-**Done check:** non-secret `GOOGLE_SHEETS_SPREADSHEET_ID=…`
+**Done check:** non-secret `GOOGLE_SHEETS_SPREADSHEET_ID=…` and `/api/health` shows Google `configured: true`.
 
 ---
 

@@ -45,3 +45,40 @@
 - Created Vercel project latch; seeded env from .env (excl Tor).
 - Added `/api/oauth/google/start` + callback; nitro preset `vercel`.
 - Next: deploy URL, add Google redirect URI, publish consent, connect + Sheet ID, merge main.
+
+## 2026-09-13 — Multi-tenant app + marketing pass
+
+- Email/password workspace signup; verify-later in Settings; no Google user auth.
+- Production app shell under `/app/*` (agents, plays, connections, evals, settings) with toasts + mobile nav.
+- Marketing pages rewritten in plain language (workspace → agents → save plays → proof).
+- Precise Google Sheet steps in `docs/GOOGLE_SHEET_SETUP.md` (owner still owes Spreadsheet ID).
+- `/dashboard` redirects to `/app`. Typecheck + unit tests green; Vite build green.
+
+## 2026-09-13 — Strip Lovable + set OG preview
+
+- Removed `@lovable.dev/vite-tanstack-config`, Lovable error telemetry, `.lovable/`, Lovable AGENTS/bunfig notes.
+- Vite config now uses TanStack Start + Nitro Vercel + Tailwind directly.
+- Root meta: Latch title/description/author, full Open Graph + Twitter cards, canonical, favicon.svg/ico, apple-touch-icon.
+- Added `public/og.jpg` (1200×630), `public/og.png`, sitemap, robots.
+- No "tabicom" traces found in repo.
+
+## 2026-09-13 — Google Sheet ID wired
+
+- Owner provided Spreadsheet ID `1vRHFoXxRyKbrC8KLk3Or3-EDjTex8-zpdYA9UcsmFIA`.
+- Set `GOOGLE_SHEETS_SPREADSHEET_ID` on Vercel (prod/preview/dev) + local `.env`.
+- Redeployed; `/api/health` Google → `configured: true`, detail `oauth+sheet present`.
+
+## 2026-09-13 — Stripe test keys + Meter README / Excalidraw diagrams
+
+- Stored Stripe test `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PUBLISHABLE_KEY` on Vercel (all envs) + local `.env` (gitignored). Never echoed secrets.
+- Webhook destination already pointed at `/api/public/stripe-webhook` (destination `we_…`).
+- Adopted Meter-style README (badges, honesty table, Mermaid diagrams, architecture SVG).
+- Shipped `/diagrams` with committed `.excalidraw` scenes + Mermaid sources; live Mermaid→Excalidraw via official CDN viewer iframe (avoids bundling Excalidraw into Nitro — that previously 500'd production).
+- Rolled back broken Excalidraw-in-server deploy; redeploy pending to pick up Stripe env + diagrams.
+
+## 2026-09-13 — Click-through tour; no VO script in repo
+
+- Removed SUBMIT.md demo VO script per owner.
+- Shipped `/app/tour` interactive click-by-click walkthrough.
+- Agent detail: Run save play + Force Slack fail wired to `/api/latch/run`.
+- Merging to main.

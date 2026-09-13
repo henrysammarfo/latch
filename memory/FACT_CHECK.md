@@ -41,3 +41,22 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 | Key `sk-jiQJ…` still `unauthorized_client` on OpenAI path | Historical | SUPERSEDED — /messages path works with current key |
 | Smoke green after /messages switch | `{"ok":true,"model":"deepseek-v4-flash","status":200}` | VERIFIED |
 | Slack LATCH bot can post to #cs on TerraSignal | Live chat.postMessage ok | channel C0C2CDTQSL8 | 2026-09-13 | VERIFIED |
+
+## 2026-09-13 — Product claims
+
+- VERIFIED in code: signup is email/password; Google OAuth is operator-only for Sheets/Gmail/Calendar.
+- VERIFIED: Gmail path remains draft-only in saga connectors.
+- PENDING owner: `GOOGLE_SHEETS_SPREADSHEET_ID` before Google connector shows configured.
+
+## 2026-09-13 — Google configured
+
+- VERIFIED: `/api/health` on latch.tryopal.asia returns Google `configured: true` after Spreadsheet ID env set.
+
+## 2026-09-13 — Stripe + diagrams packaging
+
+| Claim | Result | Evidence | Label |
+| --- | --- | --- | --- |
+| Stripe test secret + webhook secret set on Vercel | Keys added via `vercel env` (sensitive) | `vercel env ls` shows STRIPE_* | VERIFIED |
+| Bundling `@excalidraw/excalidraw` into Nitro SSR 500s production | Confirmed | prod 500 until rollback; server chunk included 4.8MB excalidraw | VERIFIED |
+| CDN iframe viewer keeps Excalidraw off server graph | Build has no `@excalidraw/*` lib chunks | `npm run build` server output | VERIFIED |
+| “Unhackable” | Not claimed | doctrine | VERIFIED |

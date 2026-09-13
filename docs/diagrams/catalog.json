@@ -1,0 +1,23 @@
+[
+  {
+    "id": "save-play",
+    "title": "Save play pipeline",
+    "description": "Trigger → compile → policy → saga → assert. Missing IDs go UNLATCHED.",
+    "mermaid": "%%{init: {\"theme\":\"dark\",\"flowchart\":{\"curve\":\"basis\",\"htmlLabels\":true},\"themeVariables\":{\"primaryColor\":\"#1B3A28\",\"primaryTextColor\":\"#F4F7FA\",\"primaryBorderColor\":\"#7CFFB2\",\"lineColor\":\"#7CFFB2\",\"secondaryColor\":\"#14301F\",\"tertiaryColor\":\"#0F241A\",\"fontFamily\":\"ui-sans-serif, system-ui, sans-serif\",\"fontSize\":\"16px\"}} }%%\nflowchart LR\n  classDef core fill:#1B3A28,stroke:#7CFFB2,color:#F4F7FA,stroke-width:2px\n  classDef gate fill:#14301F,stroke:#9AA7B8,color:#F4F7FA,stroke-width:1.5px\n  classDef sink fill:#2A1A14,stroke:#FF8A6A,color:#F4F7FA,stroke-width:2px\n  classDef win fill:#0F3D2A,stroke:#7CFFB2,color:#7CFFB2,stroke-width:2px\n\n  T[\"Trigger<br/>Gmail · Stripe · poke\"]:::gate --> R[RiskCompiler]:::core\n  R --> P[PolicyEngine]:::core\n  P -->|allow| S[SavePlay saga]:::core\n  P -->|deny / kill| X[UNLATCHED]:::sink\n  S --> SL[Slack alert]:::gate\n  SL --> SH[Sheets ledger]:::gate\n  SH --> CA[Calendar hold]:::gate\n  CA --> GM[\"Gmail draft<br/>(never auto-send)\"]:::gate\n  GM --> A[Assert proof IDs]:::core\n  A -->|all green| L[LATCHED]:::win\n  A -->|missing ID| C[Compensate]:::sink\n  C --> X\n",
+    "excalidraw": "save-play.excalidraw"
+  },
+  {
+    "id": "multi-tenant",
+    "title": "Multi-tenant workspace",
+    "description": "Email signup creates a workspace. Agents and connections belong to it.",
+    "mermaid": "%%{init: {\"theme\":\"dark\",\"flowchart\":{\"curve\":\"basis\",\"htmlLabels\":true},\"themeVariables\":{\"primaryColor\":\"#1B3A28\",\"primaryTextColor\":\"#F4F7FA\",\"primaryBorderColor\":\"#7CFFB2\",\"lineColor\":\"#7CFFB2\",\"secondaryColor\":\"#14301F\",\"tertiaryColor\":\"#0F241A\",\"fontFamily\":\"ui-sans-serif, system-ui, sans-serif\",\"fontSize\":\"16px\"}} }%%\nflowchart TB\n  classDef core fill:#1B3A28,stroke:#7CFFB2,color:#F4F7FA,stroke-width:2px\n  classDef gate fill:#14301F,stroke:#9AA7B8,color:#F4F7FA,stroke-width:1.5px\n  classDef ext fill:#0F241A,stroke:#7CFFB2,color:#B7C3D1,stroke-width:1.5px\n\n  subgraph WS[\"Workspace (tenant boundary)\"]\n    direction TB\n    U[\"User<br/>email + password\"]:::gate --> W[Workspace]:::core\n    W --> AG[Agents]:::gate\n    W --> CX[Connections]:::gate\n    AG --> PL[Plays]:::gate\n  end\n\n  CX --> SL[Slack]:::ext\n  CX --> GO[\"Google<br/>Sheet · Cal · Gmail\"]:::ext\n  CX --> ST[Stripe webhook]:::ext\n  PL --> EN[SavePlay engine]:::core\n  EN --> SL\n  EN --> GO\n  EN --> EV[Evals / goldens]:::ext\n",
+    "excalidraw": "multi-tenant.excalidraw"
+  },
+  {
+    "id": "saga-sequence",
+    "title": "Saga sequence",
+    "description": "Slack → Sheets → Calendar → Gmail draft, then asserts.",
+    "mermaid": "%%{init: {\"theme\":\"dark\",\"themeVariables\":{\"actorBkg\":\"#1B3A28\",\"actorBorder\":\"#7CFFB2\",\"actorTextColor\":\"#F4F7FA\",\"actorLineColor\":\"#7CFFB2\",\"signalColor\":\"#7CFFB2\",\"signalTextColor\":\"#F4F7FA\",\"labelBoxBkgColor\":\"#14301F\",\"labelBoxBorderColor\":\"#7CFFB2\",\"labelTextColor\":\"#F4F7FA\",\"noteBkgColor\":\"#0F241A\",\"noteTextColor\":\"#B7C3D1\",\"noteBorderColor\":\"#9AA7B8\",\"activationBkgColor\":\"#14301F\",\"activationBorderColor\":\"#7CFFB2\",\"sequenceNumberColor\":\"#07140F\",\"fontFamily\":\"ui-sans-serif, system-ui, sans-serif\",\"fontSize\":\"15px\"}} }%%\nsequenceDiagram\n  autonumber\n  participant Trig as Trigger\n  participant Pol as PolicyEngine\n  participant Slack as Slack\n  participant Sheets as Sheets\n  participant Cal as Calendar\n  participant Gmail as Gmail\n  participant Eval as Asserts\n\n  Trig->>Pol: evidence pack + ARR-at-risk\n  alt deny / kill switch\n    Pol-->>Trig: UNLATCHED (no side-effects)\n  else allow\n    Pol->>Slack: #cs alert\n    Slack-->>Pol: message_ts\n    Pol->>Sheets: OPEN_SAVE row\n    Sheets-->>Pol: updatedRange\n    Pol->>Cal: save-call hold\n    Cal-->>Pol: eventId\n    Pol->>Gmail: create draft (no send)\n    Gmail-->>Pol: draftId\n    Pol->>Eval: prove every ID\n    alt all IDs present\n      Eval-->>Pol: LATCHED\n    else missing ID\n      Eval-->>Pol: UNLATCHED + compensate\n    end\n  end\n",
+    "excalidraw": "saga-sequence.excalidraw"
+  }
+]

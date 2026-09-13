@@ -21,8 +21,8 @@ function MerchPage() {
         sub="No storefront in the hackathon build. The product is the fail-closed save play."
       />
       <section className="lx-section lx-shell" style={{ paddingTop: 24 }}>
-        <Link to="/dashboard" className="lx-pill">
-          Open console
+        <Link to="/app" className="lx-pill">
+          Open app
         </Link>
       </section>
     </SitePage>

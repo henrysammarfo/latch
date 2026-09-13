@@ -154,10 +154,9 @@ export const TRUSTED = ["Slack", "Stripe", "Gmail", "Sheets", "Calendar", "HubSp
 
 export const NAV = [
   { to: "/how-it-works", label: "How it works" },
-  { to: "/reliability", label: "Reliability" },
-  { to: "/plans", label: "Plans" },
+  { to: "/plans", label: "Pricing" },
   { to: "/docs", label: "Docs" },
-  { to: "/contact", label: "Contact" },
+  { to: "/diagrams", label: "Diagrams" },
 ] as const;
 
 export function passRate() {

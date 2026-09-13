@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Latch · Excalidraw viewer</title>
+    <link rel="stylesheet" href="https://esm.sh/@excalidraw/excalidraw@0.18.0/index.css" />
+    <style>
+      html, body, #root { margin: 0; height: 100%; background: #07140f; color: #f4f7fa; font-family: ui-sans-serif, system-ui, sans-serif; }
+      .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,.1); background: #0a1a14; }
+      .bar button, .bar a { border: 0; border-radius: 8px; padding: 6px 10px; font: 600 12px/1.2 ui-sans-serif, system-ui, sans-serif; cursor: pointer; text-decoration: none; color: rgba(255,255,255,.85); background: rgba(255,255,255,.1); }
+      .bar button.active { background: #7cffb2; color: #07140f; }
+      .status { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.55); }
+      #app { height: calc(100% - 42px); }
+      .error { padding: 24px; color: #ffb4a2; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <button type="button" id="btn-scene" class="active">Excalidraw scene</button>
+      <button type="button" id="btn-mermaid">Mermaid → Excalidraw</button>
+      <a id="download" href="#" download>Download .excalidraw</a>
+      <a href="https://github.com/excalidraw/excalidraw" target="_blank" rel="noreferrer">excalidraw</a>
+      <a href="https://github.com/excalidraw/mermaid-to-excalidraw" target="_blank" rel="noreferrer">mermaid-to-excalidraw</a>
+      <span class="status" id="status">Loading…</span>
+    </div>
+    <div id="app"></div>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18.3.1",
+          "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+          "react-dom": "https://esm.sh/react-dom@18.3.1",
+          "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
+        }
+      }
+    </script>
+    <script type="module">
+      const params = new URLSearchParams(location.search);
+      const sceneUrl = params.get("scene") || "/diagrams/save-play.excalidraw";
+      const mermaidUrl = params.get("mermaid") || "";
+      const root = document.getElementById("app");
+      const status = document.getElementById("status");
+      document.getElementById("download").href = sceneUrl;
+
+      let mode = "scene";
+
+      function fail(err) {
+        root.innerHTML = `<div class="error">${err instanceof Error ? err.message : String(err)}</div>`;
+        status.textContent = "Error";
+      }
+
+      async function boot() {
+        status.textContent = "Loading Excalidraw…";
+        const React = (await import("react")).default;
+        const { createRoot } = await import("react-dom/client");
+        const ex = await import("https://esm.sh/@excalidraw/excalidraw@0.18.0");
+        const Excalidraw = ex.Excalidraw;
+        const convert = ex.convertToExcalidrawElements;
+
+        function paint(initialData) {
+          root.innerHTML = "";
+          const mount = document.createElement("div");
+          mount.style.height = "100%";
+          root.appendChild(mount);
+          createRoot(mount).render(
+            React.createElement(Excalidraw, {
+              initialData: { ...initialData, scrollToContent: true },
+              theme: "dark",
+            }),
+          );
+        }
+
+        async function showScene() {
+          status.textContent = "Loading scene…";
+          const res = await fetch(sceneUrl);
+          if (!res.ok) throw new Error(`Scene fetch failed (${res.status})`);
+          const json = await res.json();
+          paint({
+            ...json,
+            appState: { viewBackgroundColor: "#07140F", ...(json.appState || {}) },
+          });
+          status.textContent = "Scene ready";
+        }
+
+        async function showMermaid() {
+          if (!mermaidUrl) throw new Error("No Mermaid source URL");
+          status.textContent = "Converting Mermaid → Excalidraw…";
+          const def = await fetch(mermaidUrl).then((r) => {
+            if (!r.ok) throw new Error(`Mermaid fetch failed (${r.status})`);
+            return r.text();
+          });
+          // Official package: https://github.com/excalidraw/mermaid-to-excalidraw
+          const { parseMermaidToExcalidraw } = await import(
+            "https://esm.sh/@excalidraw/mermaid-to-excalidraw@2.2.2"
+          );
+          const { elements, files } = await parseMermaidToExcalidraw(def, {
+            themeVariables: { fontSize: "18px" },
+            flowchart: { curve: "basis" },
+          });
+          const converted = typeof convert === "function" ? convert(elements) : elements;
+          paint({
+            type: "excalidraw",
+            version: 2,
+            elements: converted,
+            appState: { viewBackgroundColor: "#07140F" },
+            files: files || {},
+          });
+          status.textContent = "Mermaid conversion ready";
+        }
+
+        async function run() {
+          try {
+            if (mode === "mermaid") await showMermaid();
+            else await showScene();
+          } catch (e) {
+            fail(e);
+          }
+        }
+
+        document.getElementById("btn-scene").onclick = () => {
+          mode = "scene";
+          document.getElementById("btn-scene").classList.add("active");
+          document.getElementById("btn-mermaid").classList.remove("active");
+          run();
+        };
+        document.getElementById("btn-mermaid").onclick = () => {
+          mode = "mermaid";
+          document.getElementById("btn-mermaid").classList.add("active");
+          document.getElementById("btn-scene").classList.remove("active");
+          run();
+        };
+
+        await run();
+      }
+
+      boot().catch(fail);
+    </script>
+  </body>
+</html>

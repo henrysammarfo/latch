@@ -1,35 +1,130 @@
-# LATCH — Fail-closed churn-save orchestration
+# LATCH
 
-**One sentence:** When a customer looks ready to churn, LATCH runs a fail-closed save play across Slack, Sheets, Calendar, and a Gmail draft — and only greens when every side-effect is proven with an ID (or compensates cleanly and goes `UNLATCHED`).
+<p align="center">
+  <img src="./public/banner-latch.svg" alt="LATCH — Fail-closed churn-save orchestration" width="100%" />
+</p>
 
-## Problem
+<p align="center">
+  <a href="https://latch.tryopal.asia"><img src="https://img.shields.io/badge/Live-latch.tryopal.asia-7CFFB2?style=for-the-badge&logo=vercel&logoColor=black" alt="Live site" /></a>
+  <a href="https://latch.tryopal.asia/api/health"><img src="https://img.shields.io/badge/Health-ok-22C55E?style=for-the-badge" alt="Health" /></a>
+  <a href="https://latch.tryopal.asia/diagrams"><img src="https://img.shields.io/badge/Diagrams-Excalidraw-111827?style=for-the-badge" alt="Diagrams" /></a>
+  <a href="./memory/CREDENTIALS_RUNBOOK.md"><img src="https://img.shields.io/badge/Runbook-Credentials-0A0A0A?style=for-the-badge" alt="Credentials runbook" /></a>
+</p>
 
-Lean B2B SaaS loses renewals in the gap between a risk signal (cancel mail / Stripe past_due) and a multi-app save. Chat agents claim action. CRM rows appear without proof. Reliability is 25% of this hackathon’s score — LATCH makes it the architecture.
+<p align="center">
+  <img src="https://img.shields.io/badge/Doctrine-No_mocks-111827?style=flat-square" alt="No mocks" />
+  <img src="https://img.shields.io/badge/Gmail-Draft_only-111827?style=flat-square" alt="Gmail draft only" />
+  <img src="https://img.shields.io/badge/Auth-Email_+_password-111827?style=flat-square" alt="Email password auth" />
+  <img src="https://img.shields.io/badge/Tenancy-Workspaces_+_agents-111827?style=flat-square" alt="Multi-tenant" />
+  <img src="https://img.shields.io/badge/Saga-Compensate_on_fail-111827?style=flat-square" alt="Saga compensate" />
+  <a href="https://github.com/excalidraw/excalidraw"><img src="https://img.shields.io/badge/Excalidraw-viewer-111827?style=flat-square" alt="Excalidraw" /></a>
+  <a href="https://github.com/excalidraw/mermaid-to-excalidraw"><img src="https://img.shields.io/badge/Mermaid→Excalidraw-live-111827?style=flat-square" alt="mermaid-to-excalidraw" /></a>
+</p>
 
-## What LATCH does
+**Production:** https://latch.tryopal.asia · **App:** https://latch.tryopal.asia/app · **Diagrams:** https://latch.tryopal.asia/diagrams · **Health:** https://latch.tryopal.asia/api/health
 
-1. **RiskCompiler** — normalize Gmail/Stripe/fixture triggers → account, ARR-at-risk, evidence pack  
-2. **PolicyEngine** — fail-closed allowlists, kill switch, dry_run vs live, idempotency key = hash(trigger_id)  
-3. **SavePlay saga** — Slack alert → Sheets risk row → Calendar hold → Gmail **draft only** (never auto-send)  
-4. **Compensation** — on any forward failure, reverse prior steps and mark `UNLATCHED`  
-5. **Eval board** — goldens G1–G4 + mutation; GREEN n/n or RED  
+> When a customer looks ready to churn, **LATCH** runs a fail-closed save play across Slack, Sheets, Calendar, and a Gmail **draft** — and only greens when every side-effect is proven with an ID (or compensates cleanly and goes `UNLATCHED`).
 
-Human still owns customer-facing sends (Userlens trust).
+---
 
-## External apps
+## What's real vs what's deferred (read before judging)
 
-| App | Role | Status |
-| --- | --- | --- |
-| Gmail | Trigger + draft-only save email | Live when Google OAuth configured |
-| Stripe | Trigger (test webhooks) + ARR-at-risk | Live when Stripe test keys configured |
-| Slack | `#cs` alert with run id + proof ts | Live when bot token configured |
-| Google Sheets | Risk ledger `OPEN_SAVE` / `FAILED_SAVE` | Live when sheet ID + OAuth configured |
-| Google Calendar | Save-call hold | Live when OAuth configured |
-| Eval board | Goldens + inject-fail | Always (in-process) |
+| Surface | Status | Evidence |
+|---|---|---|
+| Marketing + multi-tenant copy | **Live** | `/` · `/how-it-works` · `/plans` |
+| Email/password workspaces | **Live** | `/register` · `/login` · JWT cookie session |
+| App shell (agents / plays / connections / evals / settings) | **Live** | `/app/*` |
+| Slack `#cs` alert step | **Configured** | `/api/health` Slack `configured: true` |
+| Google Sheets / Calendar / Gmail draft | **Configured** | `/api/health` Google `oauth+sheet present` |
+| Stripe test webhook trigger | **Configured** | `STRIPE_*` on Vercel · endpoint `/api/public/stripe-webhook` |
+| AgentRouter LLM (draft assist) | **Configured** | Tor on Cursor Cloud; fail-closed if unreachable |
+| Live `LATCH_MODE=live` side-effects | **Gated** | Stays `dry_run` until owner flips mode |
+| SMTP email verify | **Deferred** | Settings paste-token until SMTP |
+| Durable multi-region store | **Not claimed** | Memory + `/tmp` on Vercel — residual risk documented |
+| “Unhackable” | **Never claimed** | See [`memory/FACT_CHECK.md`](./memory/FACT_CHECK.md) |
 
-Minimum for rules = 3 live apps. Empire target = 5 + eval. Until owner completes [memory/CREDENTIALS_RUNBOOK.md](memory/CREDENTIALS_RUNBOOK.md), runtime stays **`dry_run`** (structured, fail-closed — not a mock green).
+---
+
+## Why this shape
+
+Peers ship chat wrappers that *say* they saved a customer.
+
+**LATCH deletion test:** wipe the proof IDs → you no longer know whether Slack posted, Sheets wrote, Calendar held, or Gmail drafted. That shared proof trail **is** the product.
+
+| Judging lens | LATCH |
+|---|---|
+| Reliability | Saga + compensation · goldens G1–G4 · force-fail eval |
+| Multi-app | Slack · Sheets · Calendar · Gmail draft · Stripe trigger |
+| Honesty | Draft-only Gmail · no silent greens · deferred SMTP called out |
+| Multi-tenant | Workspaces + agents · email/password (Google OAuth is operator connectors only) |
+
+---
 
 ## Architecture
+
+<p align="center">
+  <img src="./public/architecture-latch.svg" alt="LATCH architecture: trigger → compile → policy → save-play saga → asserts" width="100%" />
+</p>
+
+```mermaid
+flowchart LR
+  T[Trigger<br/>Gmail / Stripe / poke] --> R[RiskCompiler]
+  R --> P[PolicyEngine]
+  P -->|allow| S[SavePlay saga]
+  P -->|deny / kill| X[UNLATCHED]
+  S --> SL[Slack alert]
+  SL --> SH[Sheets ledger]
+  SH --> CA[Calendar hold]
+  CA --> GM[Gmail draft]
+  GM --> A[Assert IDs]
+  A -->|all green| L[LATCHED]
+  A -->|missing ID| C[Compensate]
+  C --> X
+```
+
+```mermaid
+flowchart TB
+  subgraph Workspace["Workspace (multi-tenant)"]
+    U[User email+password] --> WS[Workspace]
+    WS --> AG[Agents]
+    WS --> CX[Connections]
+    AG --> PL[Plays]
+  end
+  CX --> SL[Slack]
+  CX --> GO[Google Sheet / Cal / Gmail]
+  CX --> ST[Stripe webhook]
+  PL --> EN[SavePlay engine]
+  EN --> SL
+  EN --> GO
+  EN --> EV[Evals / goldens]
+```
+
+```mermaid
+sequenceDiagram
+  participant Trig as Trigger
+  participant Pol as Policy
+  participant Slack as Slack
+  participant Sheets as Sheets
+  participant Cal as Calendar
+  participant Gmail as Gmail
+  participant Eval as Asserts
+  Trig->>Pol: evidence + ARR
+  Pol->>Slack: alert
+  Slack-->>Pol: message_ts
+  Pol->>Sheets: OPEN_SAVE row
+  Sheets-->>Pol: updatedRange
+  Pol->>Cal: save-call hold
+  Cal-->>Pol: eventId
+  Pol->>Gmail: create draft
+  Gmail-->>Pol: draftId
+  Pol->>Eval: prove IDs
+  Eval-->>Pol: LATCHED or UNLATCHED+compensate
+```
+
+Interactive Excalidraw scenes (committed `.excalidraw` + live Mermaid → Excalidraw via [`@excalidraw/mermaid-to-excalidraw`](https://github.com/excalidraw/mermaid-to-excalidraw)):
+
+- **Viewer:** https://latch.tryopal.asia/diagrams
+- **Sources:** [`docs/diagrams/`](./docs/diagrams/) · rebuild with `npm run diagrams:build`
 
 ```
 Triggers → RiskCompiler → PolicyEngine → SavePlay Saga
@@ -37,31 +132,48 @@ Triggers → RiskCompiler → PolicyEngine → SavePlay Saga
    → EvalRunner → LATCHED n/n or UNLATCHED + compensate
 ```
 
-Primitives judges care about: saga + compensation · idempotent replays · dual dry/live · ARR-at-risk · force-fail eval · full step traces · stranger-deployable poke UI.
+---
 
-## Setup
+## External apps
 
-```bash
+| App | Role | Status |
+| --- | --- | --- |
+| Gmail | Trigger + draft-only save email | Configured when Google OAuth present |
+| Stripe | Trigger (test webhooks) + ARR-at-risk | Configured when `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` set |
+| Slack | `#cs` alert with run id + proof `ts` | Configured when bot token + channel set |
+| Google Sheets | Risk ledger `OPEN_SAVE` / `FAILED_SAVE` | Configured when sheet ID + OAuth set |
+| Google Calendar | Save-call hold | Configured when OAuth set |
+| Eval board | Goldens + inject-fail | Always (in-process) |
+
+---
+
+## Quickstart
+
+```sh
 cp .env.example .env
 # Fill keys per memory/CREDENTIALS_RUNBOOK.md (Slack, Google, Stripe)
-# Research keys (Tavily / TinyFish / AgentRouter) optional for local product loop
-
 npm install
+npm run diagrams:build   # Mermaid sources → .excalidraw + public/diagrams
 npm run dev
 ```
 
+Open http://127.0.0.1:3000 · diagrams at `/diagrams` · health at `/api/health`.
+
+### Stripe webhook (test mode)
+
+Point Stripe test destination to:
+
+`https://latch.tryopal.asia/api/public/stripe-webhook`
+
+Events: `customer.subscription.deleted`, `invoice.payment_failed`, `customer.subscription.updated`.
+
 ### AgentRouter (Cursor Cloud)
 
-- Base URL `https://agentrouter.org/v1` + Anthropic `POST /messages` (Tor on Cursor Cloud). OpenAI `/chat/completions` is rejected as `unauthorized_client`.
-- Set `AGENT_ROUTER_HTTP_PROXY=socks5h://127.0.0.1:9050` on Cursor Cloud (Aliyun WAF on direct)
-- Do **not** set localhost Tor proxy on Vercel production
-- Smoke: `npm run smoke:agentrouter` → `{"ok":true,"model":"deepseek-v4-flash","status":200}` (never prints the key)
-- Fail closed: no mock LLM prose
+- Base URL `https://agentrouter.org/v1` + Anthropic `POST /messages` (Tor on Cursor Cloud).
+- Set `AGENT_ROUTER_HTTP_PROXY=socks5h://127.0.0.1:9050` on Cursor Cloud only — **not** on Vercel.
+- Smoke: `npm run smoke:agentrouter` → ok JSON (never prints the key).
 
-### Stripe webhook
-
-Point Stripe test webhook to `https://<deploy>/api/public/stripe-webhook`  
-Events: `customer.subscription.deleted`, `invoice.payment_failed`, `customer.subscription.updated`
+---
 
 ## How we tested reliability
 
@@ -79,33 +191,8 @@ npm run typecheck
 npm run build
 ```
 
-Force-fail from UI: **Dashboard → Inject Slack fail**.
+---
 
-## Demo video
+## Doctrine
 
-_Link TBD — 2:00 live deploy: fire fixture → IDs on board → inject fail → UNLATCHED → goldens table → repo URL._
-
-## Live deploy / poke
-
-- Marketing: `/`  
-- Console: `/dashboard` — Run fixture · Inject Slack fail · Run goldens · traces  
-- Health: `GET /api/health`  
-- Rate-limit / kill switch: `LATCH_KILL_SWITCH=true` · optional `LATCH_PUBLIC_POKE_TOKEN`
-
-## Prior work honesty
-
-Prior taste: GROUNDS (eval) · AXIS (ship). This product is LATCH — action+proof churn-save, not those codebases.
-
-## Risks (labeled)
-
-| Risk | Label |
-| --- | --- |
-| OAuth token theft / over-scope | Residual — least privilege; rotate keys pasted in chat |
-| Aliyun WAF on AgentRouter without Tor | VERIFIED on Cursor Cloud — Tor SOCKS required |
-| Dry-run without live SaaS keys | Expected until owner finishes credentials runbook — board shows mode |
-| Not “unhackable” | Honest residual risk; fail-closed ≠ unbreakable |
-
-## License / contact
-
-Henry Sam Marfo · Accra · github.com/henrysammarfo  
-Hackathon: Multi-App AI Agent · Lemma × Comma · 2026-09-13
+No mocks. No silent fallbacks. Gmail is **draft only**. Not “unhackable” — residual risk (serverless `/tmp`, deferred SMTP, live mode gated) is documented in [`memory/FACT_CHECK.md`](./memory/FACT_CHECK.md).
