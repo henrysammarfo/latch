@@ -77,12 +77,18 @@ async function agentFetch(path: string, init?: { method?: string; body?: string 
   const key = apiKey();
   const url = `${agentRouterBaseUrl()}${path.startsWith("/") ? path : `/${path}`}`;
   const agent = buildAgent();
-  const res = await fetch(url, {
+  const requestInit: {
+    method: string;
+    headers: Record<string, string>;
+    agent?: SocksProxyAgent | HttpsProxyAgent<string>;
+    body?: string;
+  } = {
     method: init?.method ?? "GET",
-    body: init?.body,
     headers: wireHeaders(key),
-    agent: agent as never,
-  });
+  };
+  if (agent) requestInit.agent = agent;
+  if (init?.body !== undefined) requestInit.body = init.body;
+  const res = await fetch(url, requestInit as never);
   const text = await res.text();
   return { status: res.status, text };
 }
