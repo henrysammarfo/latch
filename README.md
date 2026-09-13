@@ -21,6 +21,7 @@
   <a href="https://github.com/excalidraw/mermaid-to-excalidraw"><img src="https://img.shields.io/badge/Mermaid→Excalidraw-live-111827?style=flat-square" alt="mermaid-to-excalidraw" /></a>
 </p>
 
+**Submit kit / demo script:** [`SUBMIT.md`](./SUBMIT.md)  
 **Production:** https://latch.tryopal.asia · **App:** https://latch.tryopal.asia/app · **Diagrams:** https://latch.tryopal.asia/diagrams · **Health:** https://latch.tryopal.asia/api/health
 
 > When a customer looks ready to churn, **LATCH** runs a fail-closed save play across Slack, Sheets, Calendar, and a Gmail **draft** — and only greens when every side-effect is proven with an ID (or compensates cleanly and goes `UNLATCHED`).
