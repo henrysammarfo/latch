@@ -10,14 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PlansRouteImport } from './routes/plans'
 import { Route as ReliabilityRouteImport } from './routes/reliability'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as DashboardEvalsRouteImport } from './routes/dashboard/evals'
+import { Route as ApiLatchGoldensRouteImport } from './routes/api/latch/goldens'
+import { Route as ApiLatchPlaysRouteImport } from './routes/api/latch/plays'
+import { Route as ApiLatchRunRouteImport } from './routes/api/latch/run'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
+import { Route as ApiOauthGoogleCallbackRouteImport } from './routes/api/oauth/google/callback'
+import { Route as ApiOauthGoogleStartRouteImport } from './routes/api/oauth/google/start'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsRoute = DocsRouteImport.update({
@@ -30,6 +51,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
   path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MerchRoute = MerchRouteImport.update({
+  id: '/merch',
+  path: '/merch',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlansRoute = PlansRouteImport.update({
   id: '/plans',
   path: '/plans',
@@ -40,43 +66,175 @@ const ReliabilityRoute = ReliabilityRouteImport.update({
   path: '/reliability',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardEvalsRoute = DashboardEvalsRouteImport.update({
+  id: '/evals',
+  path: '/evals',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const ApiLatchGoldensRoute = ApiLatchGoldensRouteImport.update({
+  id: '/api/latch/goldens',
+  path: '/api/latch/goldens',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLatchPlaysRoute = ApiLatchPlaysRouteImport.update({
+  id: '/api/latch/plays',
+  path: '/api/latch/plays',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLatchRunRoute = ApiLatchRunRouteImport.update({
+  id: '/api/latch/run',
+  path: '/api/latch/run',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOauthGoogleCallbackRoute = ApiOauthGoogleCallbackRouteImport.update({
+  id: '/api/oauth/google/callback',
+  path: '/api/oauth/google/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOauthGoogleStartRoute = ApiOauthGoogleStartRouteImport.update({
+  id: '/api/oauth/google/start',
+  path: '/api/oauth/google/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
   '/reliability': typeof ReliabilityRoute
+  '/api/health': typeof ApiHealthRoute
+  '/dashboard/evals': typeof DashboardEvalsRoute
+  '/api/latch/goldens': typeof ApiLatchGoldensRoute
+  '/api/latch/plays': typeof ApiLatchPlaysRoute
+  '/api/latch/run': typeof ApiLatchRunRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/oauth/google/callback': typeof ApiOauthGoogleCallbackRoute
+  '/api/oauth/google/start': typeof ApiOauthGoogleStartRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
   '/reliability': typeof ReliabilityRoute
+  '/api/health': typeof ApiHealthRoute
+  '/dashboard/evals': typeof DashboardEvalsRoute
+  '/api/latch/goldens': typeof ApiLatchGoldensRoute
+  '/api/latch/plays': typeof ApiLatchPlaysRoute
+  '/api/latch/run': typeof ApiLatchRunRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/oauth/google/callback': typeof ApiOauthGoogleCallbackRoute
+  '/api/oauth/google/start': typeof ApiOauthGoogleStartRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
   '/reliability': typeof ReliabilityRoute
+  '/api/health': typeof ApiHealthRoute
+  '/dashboard/evals': typeof DashboardEvalsRoute
+  '/api/latch/goldens': typeof ApiLatchGoldensRoute
+  '/api/latch/plays': typeof ApiLatchPlaysRoute
+  '/api/latch/run': typeof ApiLatchRunRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/oauth/google/callback': typeof ApiOauthGoogleCallbackRoute
+  '/api/oauth/google/start': typeof ApiOauthGoogleStartRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/docs' | '/how-it-works' | '/plans' | '/reliability'
+  fullPaths:
+    | '/'
+    | '/contact'
+    | '/dashboard'
+    | '/docs'
+    | '/how-it-works'
+    | '/merch'
+    | '/plans'
+    | '/reliability'
+    | '/api/health'
+    | '/dashboard/evals'
+    | '/api/latch/goldens'
+    | '/api/latch/plays'
+    | '/api/latch/run'
+    | '/api/public/stripe-webhook'
+    | '/api/oauth/google/callback'
+    | '/api/oauth/google/start'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/docs' | '/how-it-works' | '/plans' | '/reliability'
-  id: '__root__' | '/' | '/docs' | '/how-it-works' | '/plans' | '/reliability'
+  to:
+    | '/'
+    | '/contact'
+    | '/dashboard'
+    | '/docs'
+    | '/how-it-works'
+    | '/merch'
+    | '/plans'
+    | '/reliability'
+    | '/api/health'
+    | '/dashboard/evals'
+    | '/api/latch/goldens'
+    | '/api/latch/plays'
+    | '/api/latch/run'
+    | '/api/public/stripe-webhook'
+    | '/api/oauth/google/callback'
+    | '/api/oauth/google/start'
+  id:
+    | '__root__'
+    | '/'
+    | '/contact'
+    | '/dashboard'
+    | '/docs'
+    | '/how-it-works'
+    | '/merch'
+    | '/plans'
+    | '/reliability'
+    | '/api/health'
+    | '/dashboard/evals'
+    | '/api/latch/goldens'
+    | '/api/latch/plays'
+    | '/api/latch/run'
+    | '/api/public/stripe-webhook'
+    | '/api/oauth/google/callback'
+    | '/api/oauth/google/start'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   DocsRoute: typeof DocsRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  MerchRoute: typeof MerchRoute
   PlansRoute: typeof PlansRoute
   ReliabilityRoute: typeof ReliabilityRoute
+  ApiHealthRoute: typeof ApiHealthRoute
+  ApiLatchGoldensRoute: typeof ApiLatchGoldensRoute
+  ApiLatchPlaysRoute: typeof ApiLatchPlaysRoute
+  ApiLatchRunRoute: typeof ApiLatchRunRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
+  ApiOauthGoogleCallbackRoute: typeof ApiOauthGoogleCallbackRoute
+  ApiOauthGoogleStartRoute: typeof ApiOauthGoogleStartRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +244,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs': {
@@ -102,6 +274,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/merch': {
+      id: '/merch'
+      path: '/merch'
+      fullPath: '/merch'
+      preLoaderRoute: typeof MerchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/plans': {
       id: '/plans'
       path: '/plans'
@@ -116,15 +295,93 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReliabilityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/evals': {
+      id: '/dashboard/evals'
+      path: '/evals'
+      fullPath: '/dashboard/evals'
+      preLoaderRoute: typeof DashboardEvalsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/api/latch/goldens': {
+      id: '/api/latch/goldens'
+      path: '/api/latch/goldens'
+      fullPath: '/api/latch/goldens'
+      preLoaderRoute: typeof ApiLatchGoldensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/latch/plays': {
+      id: '/api/latch/plays'
+      path: '/api/latch/plays'
+      fullPath: '/api/latch/plays'
+      preLoaderRoute: typeof ApiLatchPlaysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/latch/run': {
+      id: '/api/latch/run'
+      path: '/api/latch/run'
+      fullPath: '/api/latch/run'
+      preLoaderRoute: typeof ApiLatchRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/oauth/google/callback': {
+      id: '/api/oauth/google/callback'
+      path: '/api/oauth/google/callback'
+      fullPath: '/api/oauth/google/callback'
+      preLoaderRoute: typeof ApiOauthGoogleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/oauth/google/start': {
+      id: '/api/oauth/google/start'
+      path: '/api/oauth/google/start'
+      fullPath: '/api/oauth/google/start'
+      preLoaderRoute: typeof ApiOauthGoogleStartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardEvalsRoute: typeof DashboardEvalsRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardEvalsRoute: DashboardEvalsRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   DocsRoute: DocsRoute,
   HowItWorksRoute: HowItWorksRoute,
+  MerchRoute: MerchRoute,
   PlansRoute: PlansRoute,
   ReliabilityRoute: ReliabilityRoute,
+  ApiHealthRoute: ApiHealthRoute,
+  ApiLatchGoldensRoute: ApiLatchGoldensRoute,
+  ApiLatchPlaysRoute: ApiLatchPlaysRoute,
+  ApiLatchRunRoute: ApiLatchRunRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
+  ApiOauthGoogleCallbackRoute: ApiOauthGoogleCallbackRoute,
+  ApiOauthGoogleStartRoute: ApiOauthGoogleStartRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
