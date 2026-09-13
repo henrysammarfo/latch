@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { google } from "googleapis";
 
 import { getEnv, loadEnv, requireEnv } from "../../../../server/env/loadEnv";
 
@@ -8,13 +7,14 @@ const SCOPES = [
   "https://www.googleapis.com/auth/gmail.readonly",
   "https://www.googleapis.com/auth/spreadsheets",
   "https://www.googleapis.com/auth/calendar.events",
-];
+].join(" ");
 
 function publicOrigin(request: Request): string {
   const xfHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
   const host = xfHost || request.headers.get("host") || new URL(request.url).host;
   const xfProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
-  const proto = xfProto || (host.includes("localhost") || host.startsWith("127.") ? "http" : "https");
+  const proto =
+    xfProto || (host.includes("localhost") || host.startsWith("127.") ? "http" : "https");
   return `${proto}://${host}`;
 }
 
@@ -30,17 +30,19 @@ export const Route = createFileRoute("/api/oauth/google/start")({
     handlers: {
       GET: async ({ request }) => {
         loadEnv({ force: true });
-        const client = new google.auth.OAuth2(
-          requireEnv("GOOGLE_CLIENT_ID"),
-          requireEnv("GOOGLE_CLIENT_SECRET"),
-          redirectUri(request),
-        );
-        const authUrl = client.generateAuthUrl({
+        const params = new URLSearchParams({
+          client_id: requireEnv("GOOGLE_CLIENT_ID"),
+          redirect_uri: redirectUri(request),
+          response_type: "code",
+          scope: SCOPES,
           access_type: "offline",
           prompt: "consent",
-          scope: SCOPES,
+          include_granted_scopes: "true",
         });
-        return Response.redirect(authUrl, 302);
+        return Response.redirect(
+          `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`,
+          302,
+        );
       },
     },
   },
