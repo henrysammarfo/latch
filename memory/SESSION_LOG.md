@@ -53,3 +53,11 @@
 - Marketing pages rewritten in plain language (workspace → agents → save plays → proof).
 - Precise Google Sheet steps in `docs/GOOGLE_SHEET_SETUP.md` (owner still owes Spreadsheet ID).
 - `/dashboard` redirects to `/app`. Typecheck + unit tests green; Vite build green.
+
+## 2026-09-13 — Strip Lovable + set OG preview
+
+- Removed `@lovable.dev/vite-tanstack-config`, Lovable error telemetry, `.lovable/`, Lovable AGENTS/bunfig notes.
+- Vite config now uses TanStack Start + Nitro Vercel + Tailwind directly.
+- Root meta: Latch title/description/author, full Open Graph + Twitter cards, canonical, favicon.svg/ico, apple-touch-icon.
+- Added `public/og.jpg` (1200×630), `public/og.png`, sitemap, robots.
+- No "tabicom" traces found in repo.
