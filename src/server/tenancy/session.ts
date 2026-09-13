@@ -5,8 +5,10 @@ import {
   getWorkspace,
   publicUser,
   readSessionToken,
+  snapshotForUser,
   type User,
   type Workspace,
+  type TenantSnapshot,
 } from "./store";
 
 export const SESSION_COOKIE = "latch_session";
@@ -18,12 +20,17 @@ export async function sessionFromRequest(request: Request) {
   const user = getUser(session.userId);
   const workspace = getWorkspace(session.workspaceId);
   if (!user || !workspace) return null;
-  return { user, workspace, token };
+  return { user, workspace, token, snap: session.snap };
 }
 
-export async function attachSession(response: Response, user: User, workspace: Workspace) {
-  const token = await createSessionToken(user.id, workspace.id);
-  const secure = process.env['VERCEL'] === "1" || process.env['NODE_ENV'] === "production";
+export async function attachSession(
+  response: Response,
+  user: User,
+  workspace: Workspace,
+  snap?: TenantSnapshot,
+) {
+  const token = await createSessionToken(user.id, workspace.id, snap || snapshotForUser(user.id) || undefined);
+  const secure = process.env["VERCEL"] === "1" || process.env["NODE_ENV"] === "production";
   setCookie(response, SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "Lax",

@@ -13,7 +13,7 @@ export const Route = createFileRoute("/api/auth/register")({
             name?: string;
             workspaceName?: string;
           };
-          const { user, workspace, agent } = registerUser({
+          const { user, workspace, agent, snap } = await registerUser({
             email: body.email || "",
             password: body.password || "",
             name: body.name || "",
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/api/auth/register")({
             workspace,
             agent,
           });
-          await attachSession(res, user, workspace);
+          await attachSession(res, user, workspace, snap);
           return res;
         } catch (e) {
           return jsonErr(e instanceof Error ? e.message : String(e), 400);

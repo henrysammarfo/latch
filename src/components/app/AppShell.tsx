@@ -40,13 +40,21 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
 
   useEffect(() => {
     void (async () => {
-      const res = await fetch("/api/auth/me", { credentials: "include" });
-      const json = await res.json();
-      if (!json.ok) {
-        navigate({ to: "/login" });
-        return;
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const json = (await res.json().catch(() => null)) as Me & { ok?: boolean; error?: string } | null;
+        if (res.status === 401 || (json && json.ok === false)) {
+          navigate({ to: "/login" });
+          return;
+        }
+        if (!res.ok || !json?.user || !json?.workspace) {
+          toast.error("Could not load your session. Retrying…");
+          return;
+        }
+        setMe({ user: json.user, workspace: json.workspace });
+      } catch {
+        toast.error("Network error loading session — stay put and refresh.");
       }
-      setMe(json);
     })();
   }, [navigate]);
 

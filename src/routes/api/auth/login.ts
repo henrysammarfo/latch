@@ -8,9 +8,9 @@ export const Route = createFileRoute("/api/auth/login")({
       POST: async ({ request }) => {
         try {
           const body = (await request.json()) as { email?: string; password?: string };
-          const { user, workspace } = loginUser(body.email || "", body.password || "");
+          const { user, workspace, snap } = await loginUser(body.email || "", body.password || "");
           const res = jsonOk({ user: publicUser(user), workspace });
-          await attachSession(res, user, workspace);
+          await attachSession(res, user, workspace, snap);
           return res;
         } catch (e) {
           return jsonErr(e instanceof Error ? e.message : String(e), 401);

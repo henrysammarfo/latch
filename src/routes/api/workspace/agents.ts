@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createAgent, listAgents } from "../../../server/tenancy/store";
-import { jsonErr, jsonOk, sessionFromRequest } from "../../../server/tenancy/session";
+import { createAgent, listAgents, snapshotForUser } from "../../../server/tenancy/store";
+import { attachSession, jsonErr, jsonOk, sessionFromRequest } from "../../../server/tenancy/session";
 
 export const Route = createFileRoute("/api/workspace/agents")({
   server: {
@@ -19,12 +19,15 @@ export const Route = createFileRoute("/api/workspace/agents")({
             purpose?: string;
             triggers?: string[];
           };
-          const agent = createAgent(session.workspace.id, {
+          const agent = await createAgent(session.workspace.id, {
             name: body.name || "",
             purpose: body.purpose || "",
             ...(body.triggers ? { triggers: body.triggers } : {}),
           });
-          return jsonOk({ agent });
+          const res = jsonOk({ agent });
+          const snap = snapshotForUser(session.user.id);
+          if (snap) await attachSession(res, session.user, session.workspace, snap);
+          return res;
         } catch (e) {
           return jsonErr(e instanceof Error ? e.message : String(e));
         }

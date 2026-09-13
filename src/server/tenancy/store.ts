@@ -1,37 +1,9 @@
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 import { SignJWT, jwtVerify } from "jose";
+import { loadTenantSnapshotByEmail, persistTenantSnapshot } from "./persist";
+import type { Agent, TenantSnapshot, User, Workspace } from "./types";
 
-export type User = {
-  id: string;
-  email: string;
-  name: string;
-  passwordHash: string;
-  emailVerified: boolean;
-  verifyToken: string | null;
-  workspaceId: string;
-  createdAt: string;
-};
-
-export type Agent = {
-  id: string;
-  workspaceId: string;
-  name: string;
-  purpose: string;
-  status: "draft" | "active" | "paused";
-  triggers: string[];
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type Workspace = {
-  id: string;
-  name: string;
-  slug: string;
-  ownerUserId: string;
-  createdAt: string;
-};
+export type { Agent, TenantSnapshot, User, Workspace };
 
 type Db = {
   users: User[];
@@ -39,43 +11,15 @@ type Db = {
   agents: Agent[];
 };
 
-const g = globalThis as unknown as { __latchDb?: Db; __latchDbPath?: string };
+const g = globalThis as unknown as { __latchDb?: Db };
 
 function emptyDb(): Db {
   return { users: [], workspaces: [], agents: [] };
 }
 
-function dbPath() {
-  if (process.env['LATCH_DB_PATH']) return process.env['LATCH_DB_PATH'];
-  // Vercel: /tmp is writable per instance; local: .data/
-  if (process.env['VERCEL'] === "1") return join("/tmp", "latch-tenants.json");
-  return join(process.cwd(), ".data", "tenants.json");
-}
-
 function load(): Db {
-  if (g.__latchDb) return g.__latchDb;
-  const path = dbPath();
-  try {
-    if (existsSync(path)) {
-      g.__latchDb = JSON.parse(readFileSync(path, "utf8")) as Db;
-      return g.__latchDb;
-    }
-  } catch {
-    /* fall through */
-  }
-  g.__latchDb = emptyDb();
+  if (!g.__latchDb) g.__latchDb = emptyDb();
   return g.__latchDb;
-}
-
-function save(db: Db) {
-  g.__latchDb = db;
-  try {
-    const path = dbPath();
-    mkdirSync(join(path, ".."), { recursive: true });
-    writeFileSync(path, JSON.stringify(db, null, 2));
-  } catch {
-    /* Vercel read-only FS — memory only for this instance */
-  }
 }
 
 function id(prefix: string) {
@@ -84,7 +28,6 @@ function id(prefix: string) {
 
 function scryptHash(password: string, salt = randomBytes(16).toString("hex")) {
   const hash = createHash("sha256").update(`${salt}:${password}`).digest("hex");
-  // Prefer scrypt when available via node crypto sync helper
   return `sha256$${salt}$${hash}`;
 }
 
@@ -104,12 +47,77 @@ export function verifyPassword(password: string, stored: string) {
 }
 
 function sessionSecret() {
-  const s = process.env['SESSION_SECRET'] || process.env['LATCH_SESSION_SECRET'] || "latch-dev-session-secret-change-me";
+  const s =
+    process.env["SESSION_SECRET"] ||
+    process.env["LATCH_SESSION_SECRET"] ||
+    "latch-dev-session-secret-change-me";
   return new TextEncoder().encode(s);
 }
 
-export async function createSessionToken(userId: string, workspaceId: string) {
-  return new SignJWT({ uid: userId, wid: workspaceId })
+export function snapshotForUser(userId: string): TenantSnapshot | null {
+  const db = load();
+  const user = db.users.find((u) => u.id === userId);
+  if (!user) return null;
+  const workspace = db.workspaces.find((w) => w.id === user.workspaceId);
+  if (!workspace) return null;
+  const agents = db.agents.filter((a) => a.workspaceId === workspace.id);
+  return { user, workspace, agents };
+}
+
+export function hydrateSnapshot(snap: TenantSnapshot): void {
+  const db = load();
+  const existing = db.users.find((u) => u.id === snap.user.id);
+  // Prefer keeping a real password hash if cookie snap blanked it
+  const mergedUser: User = {
+    ...snap.user,
+    passwordHash:
+      snap.user.passwordHash && snap.user.passwordHash.length > 0
+        ? snap.user.passwordHash
+        : existing?.passwordHash || "",
+  };
+
+  const ui = db.users.findIndex((u) => u.id === snap.user.id);
+  if (ui >= 0) db.users[ui] = mergedUser;
+  else db.users.push(mergedUser);
+
+  for (let i = db.users.length - 1; i >= 0; i--) {
+    const u = db.users[i]!;
+    if (u.email === snap.user.email && u.id !== snap.user.id) db.users.splice(i, 1);
+  }
+
+  const wi = db.workspaces.findIndex((w) => w.id === snap.workspace.id);
+  if (wi >= 0) db.workspaces[wi] = snap.workspace;
+  else db.workspaces.push(snap.workspace);
+
+  db.agents = db.agents.filter((a) => a.workspaceId !== snap.workspace.id);
+  db.agents.push(...snap.agents);
+}
+
+async function persistUser(userId: string): Promise<void> {
+  const snap = snapshotForUser(userId);
+  if (!snap) return;
+  await persistTenantSnapshot(snap);
+}
+
+/** Cookie-safe snap: never put password hashes in the JWT. */
+function sessionSnap(snap: TenantSnapshot): TenantSnapshot {
+  return {
+    user: {
+      ...snap.user,
+      passwordHash: "",
+    },
+    workspace: snap.workspace,
+    agents: snap.agents,
+  };
+}
+
+export async function createSessionToken(userId: string, workspaceId: string, snap?: TenantSnapshot) {
+  const raw = snap || snapshotForUser(userId) || null;
+  return new SignJWT({
+    uid: userId,
+    wid: workspaceId,
+    snap: raw ? sessionSnap(raw) : null,
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("14d")
@@ -120,21 +128,38 @@ export async function readSessionToken(token: string | undefined | null) {
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, sessionSecret());
-    const uid = String(payload['uid'] || "");
-    const wid = String(payload['wid'] || "");
+    const uid = String(payload["uid"] || "");
+    const wid = String(payload["wid"] || "");
     if (!uid || !wid) return null;
-    return { userId: uid, workspaceId: wid };
+    const snap = payload["snap"] as TenantSnapshot | undefined;
+    if (snap?.user?.id && snap?.workspace?.id) {
+      hydrateSnapshot(snap);
+    }
+    return { userId: uid, workspaceId: wid, snap };
   } catch {
     return null;
   }
 }
 
-export function registerUser(input: { email: string; password: string; name: string; workspaceName?: string }) {
-  const db = load();
+export async function registerUser(input: {
+  email: string;
+  password: string;
+  name: string;
+  workspaceName?: string;
+}) {
   const email = input.email.trim().toLowerCase();
   if (!email || !email.includes("@")) throw new Error("Enter a valid email.");
   if (input.password.length < 8) throw new Error("Password must be at least 8 characters.");
-  if (db.users.some((u) => u.email === email)) throw new Error("An account with that email already exists.");
+
+  const db = load();
+  if (db.users.some((u) => u.email === email)) {
+    throw new Error("An account with that email already exists.");
+  }
+  const fromSheet = await loadTenantSnapshotByEmail(email);
+  if (fromSheet) {
+    hydrateSnapshot(fromSheet);
+    throw new Error("An account with that email already exists.");
+  }
 
   const userId = id("usr");
   const workspaceId = id("ws");
@@ -175,23 +200,31 @@ export function registerUser(input: { email: string; password: string; name: str
     updatedAt: new Date().toISOString(),
   };
 
-  db.workspaces.push(workspace);
-  db.users.push(user);
-  db.agents.push(starter);
-  save(db);
-  return { user, workspace, agent: starter };
+  const snap: TenantSnapshot = { user, workspace, agents: [starter] };
+  hydrateSnapshot(snap);
+  await persistTenantSnapshot(snap);
+  return { user, workspace, agent: starter, snap };
 }
 
-export function loginUser(emailRaw: string, password: string) {
-  const db = load();
+export async function loginUser(emailRaw: string, password: string) {
   const email = emailRaw.trim().toLowerCase();
-  const user = db.users.find((u) => u.email === email);
+  let user = load().users.find((u) => u.email === email) || null;
+
+  if (!user) {
+    const fromSheet = await loadTenantSnapshotByEmail(email);
+    if (fromSheet) {
+      hydrateSnapshot(fromSheet);
+      user = fromSheet.user;
+    }
+  }
+
   if (!user || !verifyPassword(password, user.passwordHash)) {
     throw new Error("Email or password is wrong.");
   }
-  const workspace = db.workspaces.find((w) => w.id === user.workspaceId);
+  const workspace = load().workspaces.find((w) => w.id === user!.workspaceId);
   if (!workspace) throw new Error("Workspace missing.");
-  return { user, workspace };
+  const snap = snapshotForUser(user.id);
+  return { user, workspace, snap: snap! };
 }
 
 export function getUser(userId: string) {
@@ -212,7 +245,7 @@ export function getAgent(workspaceId: string, agentId: string) {
   return load().agents.find((a) => a.workspaceId === workspaceId && a.id === agentId) || null;
 }
 
-export function createAgent(
+export async function createAgent(
   workspaceId: string,
   input: { name: string; purpose: string; triggers?: string[] },
 ) {
@@ -228,11 +261,12 @@ export function createAgent(
     updatedAt: new Date().toISOString(),
   };
   db.agents.push(agent);
-  save(db);
+  const owner = db.workspaces.find((w) => w.id === workspaceId)?.ownerUserId;
+  if (owner) await persistUser(owner);
   return agent;
 }
 
-export function updateAgent(
+export async function updateAgent(
   workspaceId: string,
   agentId: string,
   patch: Partial<Pick<Agent, "name" | "purpose" | "status" | "triggers">>,
@@ -241,27 +275,28 @@ export function updateAgent(
   const agent = db.agents.find((a) => a.workspaceId === workspaceId && a.id === agentId);
   if (!agent) throw new Error("Agent not found.");
   Object.assign(agent, patch, { updatedAt: new Date().toISOString() });
-  save(db);
+  const owner = db.workspaces.find((w) => w.id === workspaceId)?.ownerUserId;
+  if (owner) await persistUser(owner);
   return agent;
 }
 
-export function markEmailVerified(userId: string, token: string) {
+export async function markEmailVerified(userId: string, token: string) {
   const db = load();
   const user = db.users.find((u) => u.id === userId);
   if (!user) throw new Error("User not found.");
   if (!user.verifyToken || user.verifyToken !== token) throw new Error("Invalid verify token.");
   user.emailVerified = true;
   user.verifyToken = null;
-  save(db);
+  await persistUser(userId);
   return user;
 }
 
-export function issueVerifyToken(userId: string) {
+export async function issueVerifyToken(userId: string) {
   const db = load();
   const user = db.users.find((u) => u.id === userId);
   if (!user) throw new Error("User not found.");
   user.verifyToken = randomBytes(24).toString("hex");
-  save(db);
+  await persistUser(userId);
   return user;
 }
 

@@ -1,161 +1,123 @@
-# LATCH — Demo video script (click-by-click + word for word)
-
-**You record. You speak. Follow the clicks below.**
+# LATCH — Demo video script (you record, you speak)
 
 **Production:** https://latch.tryopal.asia  
-**Sign up / sign in:** https://latch.tryopal.asia/register · https://latch.tryopal.asia/login  
+**Sign up:** https://latch.tryopal.asia/register  
+**Sign in:** https://latch.tryopal.asia/login  
 **App:** https://latch.tryopal.asia/app  
-**Length:** ~90–110 seconds  
-**Tone:** calm, sharp, judge-friendly. Never say “unhackable.”
+**Target length:** about two minutes  
+**Tone:** talk like a real person explaining the product to judges — full sentences, natural pace. Never say “unhackable.”
 
 ---
 
-## What judges do (so you know what you’re demoing)
+## What you’re actually showing
 
-| Who | What they do |
-|---|---|
-| **Judges** | Sign up with **email + password** → land in a **workspace** → create/open an **agent** → click **Run save play** |
-| **Their own Slack/Google/Stripe?** | **Not required** for the contest path. Production already has connectors **configured**. Plays run in **dry_run** by default and still show the full saga + asserts (LATCHED / UNLATCHED). |
-| **Optional** | They can open **Connections** and see Slack/Google/Stripe status. Operator Google OAuth is for *your* Sheet/Gmail/Calendar — not their login. |
-| **Live mode** | Only when you flip `LATCH_MODE=live`. Until then: honest dry_run proofs, not fake greens. |
+Judges use Latch the same way you will in this video: they create an account with email and password, land in their own workspace, open or create an agent, and click **Run save play**. They do **not** need to connect their own Slack, Google, or Stripe for the contest path — production already has those connectors configured. Plays run in **dry_run** by default, and you still get a full saga with asserts and a clear **LATCHED** or **UNLATCHED** result.
 
-**Deletion test (say this once):** wipe the proof IDs → the shared save story disappears. That’s the product.
+Say the deletion test once, somewhere natural: if you wipe the proof IDs, the shared save story disappears. That’s the point of the product.
 
 ---
 
 ## Before you hit record
 
-1. Hard-refresh https://latch.tryopal.asia  
-2. Sign in (or register once) so `/app` loads  
-3. Have these tabs ready (or click live while talking):
-   - `/` (home)
-   - `/app` (overview)
-   - `/app/agents`
-   - `/app/plays`
-   - `/app/evals`
-   - `/api/health` (optional close)
-4. Speak a half-beat slower than normal. Pause ~0.5s after each click so the UI paints.
+1. Hard-refresh https://latch.tryopal.asia so you’re on the latest build.
+2. Either stay signed out so you can show signup live, or sign in once beforehand if you want to start already inside `/app`.
+3. Keep these ready to click: home `/`, overview `/app`, Agents, Plays, Evals, and optionally Connections and `/api/health`.
+4. Speak at a normal conversational speed — a little slower than you think — and pause half a second after each click so the UI can paint on camera.
 
 ---
 
-## FULL SCRIPT — clicks + exact words
+## FULL SCRIPT — clicks + spoken lines
 
-### [0:00–0:12] HOME
+Speak the lines in quotes out loud. Do the clicks in bold. This is meant to sound like you talking, not like slide bullets.
 
-**Click:** open https://latch.tryopal.asia — hold hero 2 seconds.
+### [0:00–0:15] HOME
 
-> “Most churn tools write a note.
+**Click:** open https://latch.tryopal.asia and hold on the hero for a couple of seconds.
+
+> “Okay, so most churn tools basically just write you a note that someone might leave. Latch is different — Latch actually runs the save.
 >
-> **LATCH** runs the save.
->
-> When a customer looks ready to leave, we don’t hope. We orchestrate — and we only green when every step has proof.”
+> When a customer looks ready to cancel, we don’t sit there hoping somebody notices. We orchestrate the whole save motion, and we only call it green when every step comes back with real proof.”
 
 ---
 
-### [0:12–0:22] SIGN IN / WORKSPACE
+### [0:15–0:35] SIGN UP / WORKSPACE
 
-**Click:** **Start free** / **Sign in** → land on https://latch.tryopal.asia/app
+**Click:** **Start free** or go to https://latch.tryopal.asia/register  
+**Do:** create a fresh account with email, name, and password (8+ characters), then submit.  
+**Wait:** you should land in the app overview for your new workspace.
 
-> “Judges sign up with email and password. That creates a workspace.
+> “For judges, getting in is just email and password. That signup creates your own workspace right away.
 >
-> No Google login for accounts. Your tools are separate from your identity.”
+> There’s no Google login for the account itself. Your identity is separate from the Slack and Gmail tools that Latch uses under the hood.”
+
+If you already have an account: **Click** Sign in instead, log in, and say:
+
+> “I’m signing into my workspace here. Same path judges take — email and password, then you’re inside.”
 
 ---
 
-### [0:22–0:34] AGENTS
+### [0:35–0:55] AGENTS
 
-**Click:** sidebar **Agents** → https://latch.tryopal.asia/app/agents  
-**Click:** open an agent (or create one: name + purpose → **Create agent**)
+**Click:** sidebar **Agents**  
+**Click:** open the starter agent (“Churn watch”), or create one with a name and purpose and hit **Create agent**, then open it.
 
-> “Each workspace gets agents. One agent, one churn motion.
+> “Inside the workspace you get agents. Think of one agent as one churn motion — something that’s watching for cancel language or a failed payment and knows how to run a save.
 >
-> Create it in seconds. This is multi-tenant for real teams — not a single shared demo toy.”
+> You can create one in a few seconds. This isn’t a single shared demo toy; it’s multi-tenant, so each team gets their own workspace and their own agents.”
 
 ---
 
-### [0:34–0:55] CORE FLOW — RUN SAVE PLAY
+### [0:55–1:25] CORE FLOW — RUN SAVE PLAY
 
-**Click:** sidebar **Plays** → https://latch.tryopal.asia/app/plays  
+**Click:** sidebar **Plays**  
 **Click:** **Run save play**  
-**Wait:** for **LATCHED** and the step list.
+**Wait:** until the board shows **LATCHED** and the step list fills in. Hover a couple of steps so IDs or dry_run markers are readable on camera.
 
-> “Core flow. One click.
+> “This is the core flow, and it’s literally one click.
 >
-> Trigger hits. Policy allows. Saga runs —
+> A trigger comes in, policy says we’re allowed to act, and the saga runs. You get a Slack alert, a risk row in Sheets, a Calendar hold, and a Gmail draft — draft only, so a human still owns the send.
 >
-> Slack alert. Sheets risk row. Calendar hold. Gmail **draft only** — human still owns the send.
+> When every step has proof, the board says LATCHED. The asserts go green, and you can see ARR at risk on the card. That’s not a toast notification. That’s a receipt.
 >
-> Board says **LATCHED**. Asserts green. ARR at risk on the card.
->
-> That’s not a toast. That’s a receipt.”
-
-**Hover** the step rows so IDs / dry_run markers are readable.
-
-> “Judges do **not** need to wire their own Slack or Gmail for this path. Connectors are already configured on production. Dry-run stays honest — live mode is a flip when the operator is ready.”
+> And for the contest path, judges don’t have to wire up their own Slack or Gmail. Those connectors are already configured on production. We’re in dry_run on purpose, so the proofs stay honest — live mode is just a flip when the operator is ready.”
 
 ---
 
-### [0:55–1:12] PLOT TWIST — FORCE FAIL
+### [1:25–1:45] PLOT TWIST — FORCE FAIL
 
-**Click:** **Force Slack fail** (same Plays page)  
-**Wait:** for **UNLATCHED** + compensate.
+**Click:** **Force Slack fail** on the same Plays page  
+**Wait:** for **UNLATCHED** and compensation.
 
-> “Now we break Slack on purpose.
+> “Now I’m going to break Slack on purpose, mid-saga, with the same play.
 >
-> Same play. Mid-saga. Inject fail.
+> Latch doesn’t shrug and keep going like everything is fine. It stops, it compensates, and it marks the run UNLATCHED.
 >
-> Latch does not shrug and keep going. It stops. Compensates. Marks **UNLATCHED**.
->
-> Fail closed — not fail cute. That’s the reliability score.”
+> That’s fail closed — not fail cute — and that’s what we mean by reliability you can actually demo.”
 
 ---
 
-### [1:12–1:28] EVALS / GOLDENS
+### [1:45–2:00] EVALS + CLOSE
 
-**Click:** sidebar **Evals** → https://latch.tryopal.asia/app/evals  
-**Click:** **Re-run goldens** if needed. Show G1–G4 **PASS**.
+**Click:** sidebar **Evals** and show G1–G4 **PASS** (hit **Re-run goldens** only if you need a fresh board).  
+Optional if you still have a few seconds: **Click** **Connections** and show Slack / Google / Stripe as configured, or open `/api/health`.
 
-> “Goldens G1 through G4 —
+> “These are the golden jobs — G1 through G4. Cancel goes latched, a Slack failure goes unlatched with compensate, we cover idempotent replay, and we cover a mutation that can’t fully green. They pass on production, not on a slide deck.
 >
-> cancel goes latched,
-> Slack fail goes unlatched plus compensate,
-> idempotent replay,
-> mutation that cannot fully green.
+> Health and connections just show what’s wired. The deletion test is simple: wipe the proof IDs and the save story goes away with them.
 >
-> All pass. On production. Not a slide deck.”
+> So that’s Latch — fail-closed churn-save for real multi-tenant teams. Gmail stays draft only. No mocks. We’re not claiming this is unhackable; we’re claiming it’s honest.
+>
+> You can try it at latch.tryopal.asia, and the code is at github.com/henrysammarfo/latch.”
+
+**Hold** the final frame one or two seconds, then stop.
 
 ---
 
-### [1:28–1:42] CONNECTIONS (optional 8s — keep if you have time)
+## If you need a tighter take (~70–80 seconds)
 
-**Click:** **Connections** → show Slack / Google / Stripe **Configured**
+**Clicks:** home → sign in or register → Agents → open agent → Plays → Run save play → Force Slack fail → stop on UNLATCHED.
 
-> “Connections show what’s wired. Judges can inspect status. They don’t have to reconnect the world to feel the product.”
-
----
-
-### [1:42–1:55] CLOSE
-
-**Click:** https://latch.tryopal.asia/api/health (JSON) **or** end on Plays with LATCHED card  
-**Hold** 1–2 seconds. Stop.
-
-> “Health — Slack, Google, Stripe, AgentRouter — configured.
->
-> Deletion test: wipe the proof IDs and the save story vanishes.
->
-> LATCH — fail-closed churn-save for multi-tenant teams.
->
-> Draft only. No mocks. Not ‘unhackable’ — just honest.
->
-> latch.tryopal.asia · github.com/henrysammarfo/latch”
-
----
-
-## 20-second short cut (if you need under a minute)
-
-**Clicks:** `/` → `/app/plays` → Run save play → Force Slack fail → stop on UNLATCHED.
-
-> “LATCH — when churn shows up, we don’t write a sticky note. We run a fail-closed save play: Slack, Sheets, Calendar, Gmail draft — greens only with proof IDs, or UNLATCHED with compensation. Goldens pass on production. Judges sign up, create an agent, run the play — no app reconnect required for the contest path. latch.tryopal.asia”
+> “Latch is for the moment a customer looks ready to leave. Instead of writing a sticky note, we run a fail-closed save play — Slack, Sheets, Calendar, and a Gmail draft — and we only go green when every step has proof IDs. If something breaks mid-saga, we compensate and mark it UNLATCHED. Judges sign up with email and password, create an agent, and run the play without reconnecting their own apps. Goldens pass on production. latch.tryopal.asia.”
 
 ---
 
@@ -182,7 +144,8 @@ GitHub: https://github.com/henrysammarfo/latch
 
 ## Recording tips
 
-1. If a run errors: refresh, click **Run save play** again — don’t narrate a failed take.  
-2. Zoom the play step list if IDs are hard to read on camera.  
-3. Do **not** say unhackable.  
-4. Dry_run on purpose until you flip live — say that proudly.
+1. If a run errors, refresh and click **Run save play** again — don’t narrate a failed take.
+2. Zoom the play step list if IDs are hard to read on camera.
+3. Do not say unhackable.
+4. Dry_run is intentional until you flip live — say that proudly.
+5. Show signup or login on camera if you can; session should stick when you click into Agents and Plays.
