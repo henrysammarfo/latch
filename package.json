@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "smoke:agentrouter": "tsx scripts/smoke-agentrouter.ts",
+    "oauth:google": "tsx scripts/google-oauth.ts",
     "eval:goldens": "tsx scripts/eval-goldens.ts",
     "test:unit": "vitest run",
     "typecheck": "tsc --noEmit"
