@@ -78,7 +78,7 @@ Fill keys below as you mint them. Research keys (Tavily / TinyFish / AgentRouter
 | Var | Value |
 | --- | --- |
 | `AGENTROUTER_API_KEY` | from AgentRouter dashboard |
-| `AGENTROUTER_BASE_URL` | `https://agentrouter.org/v1` only — **never** `co.agentrouter.org` |
+| `AGENTROUTER_BASE_URL` | `https://agentrouter.org/v1` (Anthropic `/messages`; Tor on Cloud) |
 | `AGENTROUTER_MODEL` | `deepseek-v4-flash` |
 | `AGENT_ROUTER_HTTP_PROXY` | `socks5h://127.0.0.1:9050` on Cursor Cloud only |
 
@@ -86,7 +86,7 @@ On Vercel/production: set key + base URL; **do not** set Tor proxy to localhost.
 
 Smoke: `npm run smoke:agentrouter` → expect `{"ok":true,"model":"deepseek-v4-flash","status":200}` (never prints the key).
 
-Triage: **A** WAF HTML direct → Tor · **B** SOCKS timeout → restart Tor · **C** `unauthorized_client` both paths → mint new token off-repo · **D** bad key · **E** truncated JSON → raise max_tokens.
+Triage: **A** WAF HTML direct → Tor · **B** SOCKS timeout → restart Tor · **C** `unauthorized_client` on `/messages` + Claude headers → Discord/support · **D** bad key / wrong gateway · **E** truncated JSON → raise max_tokens. Do not use OpenAI `/chat/completions` — AgentRouter returns false C for generic clients.
 
 ---
 

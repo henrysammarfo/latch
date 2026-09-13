@@ -26,8 +26,9 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 | --- | --- | --- | --- |
 | Direct `agentrouter.org` from Cursor Cloud returns Aliyun WAF HTML | Confirmed | curl without proxy | VERIFIED |
 | Tor SOCKS `127.0.0.1:9050` reaches public internet | Confirmed | ipify via socks5h | VERIFIED |
-| Current AgentRouter key returns `unauthorized_client` over Tor (HTTP 401) | Confirmed | curl + `npm run smoke:agentrouter` → triage C | VERIFIED |
-| Fix is off-repo (mint new token / Discord support) — do not fake LLM success | Policy | Owner FINAL PROMPT triage C | VERIFIED |
+| OpenAI `/chat/completions` over Tor returns `unauthorized_client` (HTTP 401) even with valid key | Confirmed | probe matrix | VERIFIED (protocol, not dead key) |
+| Anthropic `/v1/messages` + Claude CLI headers succeeds with same key | Confirmed | `npm run smoke:agentrouter` → ok:true 200 | VERIFIED |
+| `co.agentrouter.org/v1` returns Invalid API Key for this key while `agentrouter.org` works | Confirmed | live probe | VERIFIED (separate gateway) |
 | Goldens G1–G4 pass in dry_run | Confirmed | `npm run eval:goldens` | VERIFIED |
 | `npm run build` + `npm run typecheck` clean | Confirmed | this session | VERIFIED |
 
@@ -37,4 +38,5 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 | --- | --- | --- |
 | undici/Bun fetch ignores SOCKS → WAF HTML on Cloud | Prior session | VERIFIED |
 | node-fetch + socks-proxy-agent via Tor reaches AgentRouter JSON | Smoke returns HTTP 401 JSON triage C (not WAF) | VERIFIED |
-| Key `sk-jiQJ…` still `unauthorized_client` over Tor | Smoke triage C | VERIFIED — mint fresh token off-repo |
+| Key `sk-jiQJ…` still `unauthorized_client` on OpenAI path | Historical | SUPERSEDED — /messages path works with current key |
+| Smoke green after /messages switch | `{"ok":true,"model":"deepseek-v4-flash","status":200}` | VERIFIED |

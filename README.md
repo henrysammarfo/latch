@@ -52,7 +52,7 @@ npm run dev
 
 ### AgentRouter (Cursor Cloud)
 
-- Base URL **only** `https://agentrouter.org/v1` (never `co.agentrouter.org`)
+- Base URL `https://agentrouter.org/v1` + Anthropic `POST /messages` (Tor on Cursor Cloud). OpenAI `/chat/completions` is rejected as `unauthorized_client`.
 - Set `AGENT_ROUTER_HTTP_PROXY=socks5h://127.0.0.1:9050` on Cursor Cloud (Aliyun WAF on direct)
 - Do **not** set localhost Tor proxy on Vercel production
 - Smoke: `npm run smoke:agentrouter` → `{"ok":true,"model":"deepseek-v4-flash","status":200}` (never prints the key)

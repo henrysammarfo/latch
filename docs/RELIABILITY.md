@@ -38,4 +38,6 @@ npm run test:unit
 npm run smoke:agentrouter
 ```
 
-Triage: **A** WAF → Tor · **B** SOCKS down → restart Tor · **C** `unauthorized_client` both paths → mint new token off-repo · **D** bad key · **E** truncated JSON → raise max_tokens.
+Protocol: Anthropic `POST /v1/messages` + Claude CLI wire headers (not OpenAI `/chat/completions`).
+
+Triage: **A** WAF → Tor · **B** SOCKS down → restart Tor · **C** `unauthorized_client` on `/messages` → Discord/support · **D** bad key / wrong gateway · **E** truncated JSON → raise max_tokens.

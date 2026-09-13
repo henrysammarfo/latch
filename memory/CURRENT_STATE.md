@@ -16,8 +16,10 @@
 
 ## AgentRouter
 
-- Tor path works; smoke returns **triage C** (`unauthorized_client`) for current key — **mint new AgentRouter API key** then re-smoke.
-- LLM draft remains optional (`LATCH_LLM_DRAFT=true` only after smoke ok). Risk asserts stay deterministic.
+- **LIVE:** `npm run smoke:agentrouter` → `{"ok":true,"model":"deepseek-v4-flash","status":200}` (2026-09-13).
+- Transport: Tor SOCKS + `node-fetch`/`socks-proxy-agent`.
+- Protocol: Anthropic `POST /v1/messages` + Claude CLI wire headers (OpenAI `/chat/completions` → false `unauthorized_client`).
+- Base: `https://agentrouter.org/v1`. LLM draft still gated by `LATCH_LLM_DRAFT=true`; risk asserts stay deterministic.
 
 ## Blocked on owner credentials
 

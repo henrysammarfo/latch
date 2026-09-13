@@ -24,3 +24,10 @@
 - Smoke now correctly labels **triage C** (`unauthorized_client`) — fail closed, no mock LLM.
 - Owner must mint a fresh AgentRouter token off-repo / Discord; then re-run `npm run smoke:agentrouter`.
 - Unit tests + goldens still green; typecheck + build green.
+
+## 2026-09-13 — AgentRouter base/protocol fix (owner pushback)
+
+- Owner: keys work in other chats; change base — do not only blame Discord.
+- Matrix: `agentrouter.org/v1` Tor → C on `/chat/completions`; direct → WAF A; `co.agentrouter.org/v1` → D Invalid API Key; other hosts ENOTFOUND/404.
+- Root cause: AgentRouter rejects generic OpenAI clients; Claude-Code Anthropic `/v1/messages` + CLI headers works with same key.
+- Client switched to `POST {base}/messages`; smoke **OK** `deepseek-v4-flash` status 200. Goldens/unit/typecheck green.

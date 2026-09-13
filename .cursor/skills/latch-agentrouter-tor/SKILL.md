@@ -7,11 +7,23 @@ description: Wire AgentRouter LLM via Tor SOCKS on Cursor Cloud with fail-closed
 
 ## Hard rules
 
-1. Base URL only: `https://agentrouter.org` / OpenAI-compatible `https://agentrouter.org/v1`
-2. Forbidden: `co.agentrouter.org`, fallbacks to OpenAI/Anthropic public APIs
+1. Default base: `https://agentrouter.org/v1` (Tor required on Cursor Cloud)
+2. Protocol: **Anthropic Messages** `POST {base}/messages` — NOT OpenAI `/chat/completions`
 3. Never commit `.env` or echo keys
 4. Fail closed — no mock LLM text
 5. Do not invent proxy hosts — local Tor or owner-supplied proxy URL only
+
+## Why /messages (not /chat/completions)
+
+AgentRouter fingerprints clients. Generic OpenAI `/chat/completions` returns
+`unauthorized_client` even with a valid key. Claude-Code-shaped Anthropic
+`/v1/messages` + CLI wire headers succeeds (verified 2026-09-13 on this VM).
+Official guide also documents Anthropic base without `/v1` for Claude Code;
+our client calls `{base}/messages` with base ending in `/v1`.
+
+`co.agentrouter.org` is a separate gateway (docs OpenAI path). Same key may
+return `Invalid API Key` there while working on `agentrouter.org` — do not
+treat that as proof the key is dead.
 
 ## Env
 
@@ -27,9 +39,11 @@ AGENT_ROUTER_HTTP_PROXY=socks5h://127.0.0.1:9050
 ## Client
 
 - Force-load gitignored `.env`
-- Headers: `Authorization: Bearer` + `x-api-key` + Claude-CLI-compatible wire headers
-- `socks5h` → `socks-proxy-agent`; http(s) proxy → undici `ProxyAgent`
-- `max_tokens >= 4096` for allocate JSON
+- `POST /messages` with Anthropic body (`model`, `max_tokens`, `messages`)
+- Headers: Claude CLI wire (`user-agent: claude-cli/…`, `x-app: cli`,
+  `anthropic-version`, `anthropic-dangerous-direct-browser-access`, Bearer + x-api-key)
+- Tor: `socks5h` → `socks-proxy-agent` + `node-fetch`
+- `max_tokens >= 4096` for allocate JSON drafts
 
 ## Verify order
 
@@ -39,4 +53,10 @@ AGENT_ROUTER_HTTP_PROXY=socks5h://127.0.0.1:9050
 
 ## Triage A–E
 
-See `.cursor/rules/latch-secrets-and-live.mdc`. On `unauthorized_client` both paths → off-repo token mint; stop iterating headers.
+See `.cursor/rules/latch-secrets-and-live.mdc`.
+
+- **A** WAF HTML → Tor
+- **B** SOCKS down → restart Tor
+- **C** `unauthorized_client` on `/messages` with Claude CLI headers → account/client flag; Discord/support
+- **D** Invalid API Key → wrong gateway or dead key
+- **E** truncated/empty → raise max_tokens / check model
