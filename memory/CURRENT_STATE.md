@@ -23,12 +23,14 @@
 
 ## Slack
 
-- App **LATCH** installed on TerraSignal (`A0C1J0RTP1Q`); bot user `latch_local`; `SLACK_BOT_TOKEN` in gitignored `.env`.
-- Still need `#cs` channel invite + `SLACK_CS_CHANNEL_ID`.
+- App **LATCH** installed on TerraSignal (`A0C1J0RTP1Q`); bot `latch_local`; token in gitignored `.env`.
+- Channel `#cs` (`C0C2CDTQSL8`) — bot is member; live `chat.postMessage` test **ok**.
+- Slack connector ready for live mode once `LATCH_MODE=live`.
+
 
 ## Blocked on owner credentials
 
-See `memory/CREDENTIALS_RUNBOOK.md` — Slack bot, Google OAuth+Sheet, Stripe test webhook. Until then live side-effect IDs will not appear (by design).
+See `memory/CREDENTIALS_RUNBOOK.md` — **Slack done**. Next: Google OAuth+Sheet, then Stripe test webhook.
 
 ## Research keys (local .env, gitignored)
 

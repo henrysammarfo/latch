@@ -35,3 +35,7 @@
 
 - `slack auth login` completed; app **LATCH** installed (local) on TerraSignal.
 - Bot token written to `.env` only (auth.test ok). Awaiting channel ID + invite.
+## 2026-09-13 — Slack #cs live post OK
+
+- `SLACK_CS_CHANNEL_ID=C0C2CDTQSL8` (#cs); bot member; `chat.postMessage` returned ok + ts.
+- Next: Google baby-step 1 (Cloud project + enable APIs).

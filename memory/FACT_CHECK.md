@@ -40,3 +40,4 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 | node-fetch + socks-proxy-agent via Tor reaches AgentRouter JSON | Smoke returns HTTP 401 JSON triage C (not WAF) | VERIFIED |
 | Key `sk-jiQJ…` still `unauthorized_client` on OpenAI path | Historical | SUPERSEDED — /messages path works with current key |
 | Smoke green after /messages switch | `{"ok":true,"model":"deepseek-v4-flash","status":200}` | VERIFIED |
+| Slack LATCH bot can post to #cs on TerraSignal | Live chat.postMessage ok | channel C0C2CDTQSL8 | 2026-09-13 | VERIFIED |
