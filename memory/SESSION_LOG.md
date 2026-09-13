@@ -45,3 +45,11 @@
 - Created Vercel project latch; seeded env from .env (excl Tor).
 - Added `/api/oauth/google/start` + callback; nitro preset `vercel`.
 - Next: deploy URL, add Google redirect URI, publish consent, connect + Sheet ID, merge main.
+
+## 2026-09-13 — Multi-tenant app + marketing pass
+
+- Email/password workspace signup; verify-later in Settings; no Google user auth.
+- Production app shell under `/app/*` (agents, plays, connections, evals, settings) with toasts + mobile nav.
+- Marketing pages rewritten in plain language (workspace → agents → save plays → proof).
+- Precise Google Sheet steps in `docs/GOOGLE_SHEET_SETUP.md` (owner still owes Spreadsheet ID).
+- `/dashboard` redirects to `/app`. Typecheck + unit tests green; Vite build green.

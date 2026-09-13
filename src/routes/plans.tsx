@@ -5,19 +5,12 @@ import { PageHead, SitePage } from "@/components/latch/SiteChrome";
 export const Route = createFileRoute("/plans")({
   head: () => ({
     meta: [
-      { title: "Latch plans — churn-save latching for lean CS teams" },
+      { title: "Latch pricing — workspaces for customer teams" },
       {
         name: "description",
         content:
-          "Three plans for teams that need proof, not promises: Solo CSM, Team and Audit. Every plan includes side-effect asserts and the eval board.",
+          "Simple plans for teams that want churn-save agents with proof. Start free, grow when your workspace needs more seats and plays.",
       },
-      { property: "og:title", content: "Latch plans" },
-      {
-        property: "og:description",
-        content: "Pricing for fail-closed churn-save latching, from a single CSM to an audited CS org.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Plans,
@@ -25,47 +18,48 @@ export const Route = createFileRoute("/plans")({
 
 const PLANS = [
   {
-    name: "Solo CSM",
-    price: "$49",
-    per: "per month",
-    blurb: "One owner, one risk ledger, all four asserts.",
+    name: "Starter",
+    price: "Free",
+    per: "to explore",
+    blurb: "One workspace, email signup, dry-run plays with proof.",
     features: [
-      "Gmail + Stripe triggers",
-      "Slack, Sheets and Calendar side effects",
-      "Eval board with provider IDs",
-      "50 latched plays / month",
+      "Email + password signup (verify later)",
+      "Create agents in your workspace",
+      "Dry-run save plays + eval board",
+      "Slack / Google / Stripe connections when ready",
     ],
-    cta: "Start latching",
+    cta: "Start free",
+    to: "/register" as const,
     featured: false,
   },
   {
     name: "Team",
     price: "$249",
     per: "per month",
-    blurb: "Round-robin owners, shared board, force-fail on demand.",
+    blurb: "For CS teams running live save plays across accounts.",
     features: [
-      "Everything in Solo CSM",
-      "Unlimited plays and owners",
-      "Failure injection console",
-      "HubSpot risk records",
-      "Slack alerting per segment",
+      "Everything in Starter",
+      "Live mode with real tool IDs",
+      "More seats and agent capacity",
+      "Shared play history for the workspace",
     ],
-    cta: "Start a trial",
+    cta: "Create workspace",
+    to: "/register" as const,
     featured: true,
   },
   {
     name: "Audit",
     price: "Talk to us",
     per: "annual",
-    blurb: "For teams who must show the trail to a customer or a board.",
+    blurb: "For teams that need exportable trails and custom evals.",
     features: [
       "Everything in Team",
-      "Exportable audit trail per account",
-      "Custom golden job suite",
-      "Deletion test evidence pack",
-      "Private deployment region",
+      "Exportable audit trail",
+      "Custom golden jobs",
+      "Deletion evidence pack",
     ],
-    cta: "Book a call",
+    cta: "Contact",
+    to: "/contact" as const,
     featured: false,
   },
 ];
@@ -74,9 +68,13 @@ function Plans() {
   return (
     <SitePage>
       <PageHead
-        eyebrow="Plans"
-        title={<>Pay for the <span className="lx-serif">proof</span>, not the prompt.</>}
-        sub="Every plan runs the same fail-closed engine. What changes is how many accounts you latch and how much of the trail you can export."
+        eyebrow="Pricing"
+        title={
+          <>
+            Pay for the <span className="lx-serif">workspace</span>, not the buzzwords.
+          </>
+        }
+        sub="Every plan uses the same fail-closed engine. What changes is how many people and plays you run."
       />
 
       <section className="lx-section lx-shell" style={{ paddingTop: 40 }}>
@@ -93,11 +91,9 @@ function Plans() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <h2 className="lx-h3">{p.name}</h2>
-                {p.featured ? <span className="lx-badge">Most latched</span> : null}
+                {p.featured ? <span className="lx-badge">Popular</span> : null}
               </div>
-              <p style={{ fontSize: 40, fontWeight: 600, letterSpacing: "-0.06em", marginTop: 18 }}>
-                {p.price}
-              </p>
+              <p style={{ fontSize: 40, fontWeight: 600, letterSpacing: "-0.06em", marginTop: 18 }}>{p.price}</p>
               <p className="lx-small" style={{ color: p.featured ? "var(--lx-faint)" : undefined }}>
                 {p.per}
               </p>
@@ -113,7 +109,7 @@ function Plans() {
                 ))}
               </div>
               <Link
-                to="/contact"
+                to={p.to}
                 className={p.featured ? "lx-pill-ghost" : "lx-pill"}
                 style={{ marginTop: 26 }}
               >
@@ -124,11 +120,10 @@ function Plans() {
         </div>
 
         <div className="lx-card lx-card-soft" style={{ marginTop: 32 }}>
-          <h2 className="lx-h3">What no plan will ever do</h2>
+          <h2 className="lx-h3">What no plan will do</h2>
           <p className="lx-small" style={{ marginTop: 10, maxWidth: 620 }}>
-            Send a customer-facing email on your behalf without a human pressing
-            send, or report a green board when an app returned nothing. Those two
-            limits are the product.
+            Send a customer email without a human pressing send, or show green when a tool returned
+            nothing. Those limits are the product.
           </p>
         </div>
       </section>

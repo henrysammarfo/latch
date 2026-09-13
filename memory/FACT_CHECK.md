@@ -41,3 +41,9 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 | Key `sk-jiQJ…` still `unauthorized_client` on OpenAI path | Historical | SUPERSEDED — /messages path works with current key |
 | Smoke green after /messages switch | `{"ok":true,"model":"deepseek-v4-flash","status":200}` | VERIFIED |
 | Slack LATCH bot can post to #cs on TerraSignal | Live chat.postMessage ok | channel C0C2CDTQSL8 | 2026-09-13 | VERIFIED |
+
+## 2026-09-13 — Product claims
+
+- VERIFIED in code: signup is email/password; Google OAuth is operator-only for Sheets/Gmail/Calendar.
+- VERIFIED: Gmail path remains draft-only in saga connectors.
+- PENDING owner: `GOOGLE_SHEETS_SPREADSHEET_ID` before Google connector shows configured.

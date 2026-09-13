@@ -26,11 +26,14 @@ export function Navbar() {
             ))}
           </nav>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <Link to="/dashboard" className="lx-pill">
-              Open console
+            <Link to="/login" className="lx-navlink" data-active={path === "/login"}>
+              Sign in
+            </Link>
+            <Link to="/register" className="lx-pill">
+              Start free
               <ArrowUpRight size={16} />
             </Link>
-            <button className="lx-pill lx-menu-btn" onClick={() => setOpen(true)}>
+            <button className="lx-pill lx-menu-btn" onClick={() => setOpen(true)} type="button">
               Menu
               <ChevronUp size={16} />
             </button>
@@ -57,12 +60,18 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
-          <Link to="/dashboard" className="lx-drawer-link" onClick={() => setOpen(false)}>
-            Console
+          <Link to="/login" className="lx-drawer-link" onClick={() => setOpen(false)}>
+            Sign in
+          </Link>
+          <Link to="/register" className="lx-drawer-link" onClick={() => setOpen(false)}>
+            Start free
+          </Link>
+          <Link to="/app" className="lx-drawer-link" onClick={() => setOpen(false)}>
+            Open app
           </Link>
         </div>
         <div className="lx-shell" style={{ paddingBottom: 28 }}>
-          <p className="lx-small">© 2026 Latch — fail-closed churn-save.</p>
+          <p className="lx-small">© 2026 Latch — churn-save agents for every team.</p>
         </div>
       </div>
     </>
@@ -77,27 +86,27 @@ export function Footer() {
           <div>
             <LatchWordmark size={24} />
             <p className="lx-small" style={{ maxWidth: 280, marginTop: 12 }}>
-              The action-and-proof layer for AI customer success. If an app didn't
-              move, the board never goes green.
+              Create agents that catch churn risk, take the next steps, and keep a clear
+              record of what happened — for your workspace and every teammate on it.
             </p>
           </div>
           <div>
             <p className="lx-eyebrow">Product</p>
             <Link to="/how-it-works" className="lx-footer-link">How it works</Link>
+            <Link to="/plans" className="lx-footer-link">Pricing</Link>
             <Link to="/reliability" className="lx-footer-link">Reliability</Link>
-            <Link to="/plans" className="lx-footer-link">Plans</Link>
           </div>
           <div>
             <p className="lx-eyebrow">Build</p>
             <Link to="/docs" className="lx-footer-link">Docs</Link>
-            <Link to="/dashboard" className="lx-footer-link">Console</Link>
-            <Link to="/dashboard/evals" className="lx-footer-link">Eval board</Link>
+            <Link to="/register" className="lx-footer-link">Create workspace</Link>
+            <Link to="/app" className="lx-footer-link">App</Link>
           </div>
           <div>
             <p className="lx-eyebrow">Company</p>
             <Link to="/contact" className="lx-footer-link">Contact</Link>
-            <a href="https://github.com/henrysammarfo" className="lx-footer-link">GitHub</a>
-            <Link to="/merch" className="lx-footer-link">Merch</Link>
+            <Link to="/privacy" className="lx-footer-link">Privacy</Link>
+            <Link to="/terms" className="lx-footer-link">Terms</Link>
           </div>
         </div>
         <div

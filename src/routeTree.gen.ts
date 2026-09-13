@@ -14,19 +14,35 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PlansRouteImport } from './routes/plans'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ReliabilityRouteImport } from './routes/reliability'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppConnectionsRouteImport } from './routes/app/connections'
+import { Route as AppEvalsRouteImport } from './routes/app/evals'
+import { Route as AppPlaysRouteImport } from './routes/app/plays'
+import { Route as AppSettingsRouteImport } from './routes/app/settings'
 import { Route as DashboardEvalsRouteImport } from './routes/dashboard/evals'
+import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
+import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
+import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
+import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth/register'
+import { Route as ApiAuthVerifyEmailRouteImport } from './routes/api/auth/verify-email'
 import { Route as ApiLatchGoldensRouteImport } from './routes/api/latch/goldens'
 import { Route as ApiLatchPlaysRouteImport } from './routes/api/latch/plays'
 import { Route as ApiLatchRunRouteImport } from './routes/api/latch/run'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
+import { Route as ApiWorkspaceAgentsRouteImport } from './routes/api/workspace/agents'
+import { Route as AppAgentsIndexRouteImport } from './routes/app/agents/index'
+import { Route as AppAgentsAgentIdRouteImport } from './routes/app/agents/$agentId'
 import { Route as ApiOauthGoogleCallbackRouteImport } from './routes/api/oauth/google/callback'
 import { Route as ApiOauthGoogleStartRouteImport } from './routes/api/oauth/google/start'
+import { Route as ApiWorkspaceAgentsAgentIdRouteImport } from './routes/api/workspace/agents/$agentId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -53,6 +69,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
   path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MerchRoute = MerchRouteImport.update({
   id: '/merch',
   path: '/merch',
@@ -66,6 +87,11 @@ const PlansRoute = PlansRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReliabilityRoute = ReliabilityRouteImport.update({
@@ -83,10 +109,60 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/app/',
+  path: '/app/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppConnectionsRoute = AppConnectionsRouteImport.update({
+  id: '/app/connections',
+  path: '/app/connections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppEvalsRoute = AppEvalsRouteImport.update({
+  id: '/app/evals',
+  path: '/app/evals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppPlaysRoute = AppPlaysRouteImport.update({
+  id: '/app/plays',
+  path: '/app/plays',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/app/settings',
+  path: '/app/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardEvalsRoute = DashboardEvalsRouteImport.update({
   id: '/evals',
   path: '/evals',
   getParentRoute: () => DashboardRoute,
+} as any)
+const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
+  id: '/api/auth/login',
+  path: '/api/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
+  id: '/api/auth/logout',
+  path: '/api/auth/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthMeRoute = ApiAuthMeRouteImport.update({
+  id: '/api/auth/me',
+  path: '/api/auth/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
+  id: '/api/auth/register',
+  path: '/api/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthVerifyEmailRoute = ApiAuthVerifyEmailRouteImport.update({
+  id: '/api/auth/verify-email',
+  path: '/api/auth/verify-email',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiLatchGoldensRoute = ApiLatchGoldensRouteImport.update({
   id: '/api/latch/goldens',
@@ -108,6 +184,21 @@ const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   path: '/api/public/stripe-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWorkspaceAgentsRoute = ApiWorkspaceAgentsRouteImport.update({
+  id: '/api/workspace/agents',
+  path: '/api/workspace/agents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppAgentsIndexRoute = AppAgentsIndexRouteImport.update({
+  id: '/app/agents/',
+  path: '/app/agents/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppAgentsAgentIdRoute = AppAgentsAgentIdRouteImport.update({
+  id: '/app/agents/$agentId',
+  path: '/app/agents/$agentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOauthGoogleCallbackRoute = ApiOauthGoogleCallbackRouteImport.update({
   id: '/api/oauth/google/callback',
   path: '/api/oauth/google/callback',
@@ -118,6 +209,12 @@ const ApiOauthGoogleStartRoute = ApiOauthGoogleStartRouteImport.update({
   path: '/api/oauth/google/start',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWorkspaceAgentsAgentIdRoute =
+  ApiWorkspaceAgentsAgentIdRouteImport.update({
+    id: '/$agentId',
+    path: '/$agentId',
+    getParentRoute: () => ApiWorkspaceAgentsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -125,19 +222,35 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
   '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
   '/privacy': typeof PrivacyRoute
+  '/register': typeof RegisterRoute
   '/reliability': typeof ReliabilityRoute
   '/terms': typeof TermsRoute
   '/api/health': typeof ApiHealthRoute
+  '/app/connections': typeof AppConnectionsRoute
+  '/app/evals': typeof AppEvalsRoute
+  '/app/plays': typeof AppPlaysRoute
+  '/app/settings': typeof AppSettingsRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
+  '/app/': typeof AppIndexRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
   '/api/latch/goldens': typeof ApiLatchGoldensRoute
   '/api/latch/plays': typeof ApiLatchPlaysRoute
   '/api/latch/run': typeof ApiLatchRunRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/workspace/agents': typeof ApiWorkspaceAgentsRouteWithChildren
+  '/app/agents/$agentId': typeof AppAgentsAgentIdRoute
+  '/app/agents/': typeof AppAgentsIndexRoute
   '/api/oauth/google/callback': typeof ApiOauthGoogleCallbackRoute
   '/api/oauth/google/start': typeof ApiOauthGoogleStartRoute
+  '/api/workspace/agents/$agentId': typeof ApiWorkspaceAgentsAgentIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -145,19 +258,35 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
   '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
   '/privacy': typeof PrivacyRoute
+  '/register': typeof RegisterRoute
   '/reliability': typeof ReliabilityRoute
   '/terms': typeof TermsRoute
   '/api/health': typeof ApiHealthRoute
+  '/app/connections': typeof AppConnectionsRoute
+  '/app/evals': typeof AppEvalsRoute
+  '/app/plays': typeof AppPlaysRoute
+  '/app/settings': typeof AppSettingsRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
+  '/app': typeof AppIndexRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
   '/api/latch/goldens': typeof ApiLatchGoldensRoute
   '/api/latch/plays': typeof ApiLatchPlaysRoute
   '/api/latch/run': typeof ApiLatchRunRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/workspace/agents': typeof ApiWorkspaceAgentsRouteWithChildren
+  '/app/agents/$agentId': typeof AppAgentsAgentIdRoute
+  '/app/agents': typeof AppAgentsIndexRoute
   '/api/oauth/google/callback': typeof ApiOauthGoogleCallbackRoute
   '/api/oauth/google/start': typeof ApiOauthGoogleStartRoute
+  '/api/workspace/agents/$agentId': typeof ApiWorkspaceAgentsAgentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -166,19 +295,35 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteWithChildren
   '/docs': typeof DocsRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/login': typeof LoginRoute
   '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
   '/privacy': typeof PrivacyRoute
+  '/register': typeof RegisterRoute
   '/reliability': typeof ReliabilityRoute
   '/terms': typeof TermsRoute
   '/api/health': typeof ApiHealthRoute
+  '/app/connections': typeof AppConnectionsRoute
+  '/app/evals': typeof AppEvalsRoute
+  '/app/plays': typeof AppPlaysRoute
+  '/app/settings': typeof AppSettingsRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
+  '/app/': typeof AppIndexRoute
+  '/api/auth/login': typeof ApiAuthLoginRoute
+  '/api/auth/logout': typeof ApiAuthLogoutRoute
+  '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
+  '/api/auth/verify-email': typeof ApiAuthVerifyEmailRoute
   '/api/latch/goldens': typeof ApiLatchGoldensRoute
   '/api/latch/plays': typeof ApiLatchPlaysRoute
   '/api/latch/run': typeof ApiLatchRunRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/workspace/agents': typeof ApiWorkspaceAgentsRouteWithChildren
+  '/app/agents/$agentId': typeof AppAgentsAgentIdRoute
+  '/app/agents/': typeof AppAgentsIndexRoute
   '/api/oauth/google/callback': typeof ApiOauthGoogleCallbackRoute
   '/api/oauth/google/start': typeof ApiOauthGoogleStartRoute
+  '/api/workspace/agents/$agentId': typeof ApiWorkspaceAgentsAgentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -188,19 +333,35 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/docs'
     | '/how-it-works'
+    | '/login'
     | '/merch'
     | '/plans'
     | '/privacy'
+    | '/register'
     | '/reliability'
     | '/terms'
     | '/api/health'
+    | '/app/connections'
+    | '/app/evals'
+    | '/app/plays'
+    | '/app/settings'
     | '/dashboard/evals'
+    | '/app/'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/me'
+    | '/api/auth/register'
+    | '/api/auth/verify-email'
     | '/api/latch/goldens'
     | '/api/latch/plays'
     | '/api/latch/run'
     | '/api/public/stripe-webhook'
+    | '/api/workspace/agents'
+    | '/app/agents/$agentId'
+    | '/app/agents/'
     | '/api/oauth/google/callback'
     | '/api/oauth/google/start'
+    | '/api/workspace/agents/$agentId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -208,19 +369,35 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/docs'
     | '/how-it-works'
+    | '/login'
     | '/merch'
     | '/plans'
     | '/privacy'
+    | '/register'
     | '/reliability'
     | '/terms'
     | '/api/health'
+    | '/app/connections'
+    | '/app/evals'
+    | '/app/plays'
+    | '/app/settings'
     | '/dashboard/evals'
+    | '/app'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/me'
+    | '/api/auth/register'
+    | '/api/auth/verify-email'
     | '/api/latch/goldens'
     | '/api/latch/plays'
     | '/api/latch/run'
     | '/api/public/stripe-webhook'
+    | '/api/workspace/agents'
+    | '/app/agents/$agentId'
+    | '/app/agents'
     | '/api/oauth/google/callback'
     | '/api/oauth/google/start'
+    | '/api/workspace/agents/$agentId'
   id:
     | '__root__'
     | '/'
@@ -228,19 +405,35 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/docs'
     | '/how-it-works'
+    | '/login'
     | '/merch'
     | '/plans'
     | '/privacy'
+    | '/register'
     | '/reliability'
     | '/terms'
     | '/api/health'
+    | '/app/connections'
+    | '/app/evals'
+    | '/app/plays'
+    | '/app/settings'
     | '/dashboard/evals'
+    | '/app/'
+    | '/api/auth/login'
+    | '/api/auth/logout'
+    | '/api/auth/me'
+    | '/api/auth/register'
+    | '/api/auth/verify-email'
     | '/api/latch/goldens'
     | '/api/latch/plays'
     | '/api/latch/run'
     | '/api/public/stripe-webhook'
+    | '/api/workspace/agents'
+    | '/app/agents/$agentId'
+    | '/app/agents/'
     | '/api/oauth/google/callback'
     | '/api/oauth/google/start'
+    | '/api/workspace/agents/$agentId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,16 +442,31 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRouteWithChildren
   DocsRoute: typeof DocsRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  LoginRoute: typeof LoginRoute
   MerchRoute: typeof MerchRoute
   PlansRoute: typeof PlansRoute
   PrivacyRoute: typeof PrivacyRoute
+  RegisterRoute: typeof RegisterRoute
   ReliabilityRoute: typeof ReliabilityRoute
   TermsRoute: typeof TermsRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  AppConnectionsRoute: typeof AppConnectionsRoute
+  AppEvalsRoute: typeof AppEvalsRoute
+  AppPlaysRoute: typeof AppPlaysRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
+  ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
+  ApiAuthMeRoute: typeof ApiAuthMeRoute
+  ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
+  ApiAuthVerifyEmailRoute: typeof ApiAuthVerifyEmailRoute
   ApiLatchGoldensRoute: typeof ApiLatchGoldensRoute
   ApiLatchPlaysRoute: typeof ApiLatchPlaysRoute
   ApiLatchRunRoute: typeof ApiLatchRunRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
+  ApiWorkspaceAgentsRoute: typeof ApiWorkspaceAgentsRouteWithChildren
+  AppAgentsAgentIdRoute: typeof AppAgentsAgentIdRoute
+  AppAgentsIndexRoute: typeof AppAgentsIndexRoute
   ApiOauthGoogleCallbackRoute: typeof ApiOauthGoogleCallbackRoute
   ApiOauthGoogleStartRoute: typeof ApiOauthGoogleStartRoute
 }
@@ -300,6 +508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/merch': {
       id: '/merch'
       path: '/merch'
@@ -319,6 +534,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reliability': {
@@ -342,12 +564,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/app'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/connections': {
+      id: '/app/connections'
+      path: '/app/connections'
+      fullPath: '/app/connections'
+      preLoaderRoute: typeof AppConnectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/evals': {
+      id: '/app/evals'
+      path: '/app/evals'
+      fullPath: '/app/evals'
+      preLoaderRoute: typeof AppEvalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/plays': {
+      id: '/app/plays'
+      path: '/app/plays'
+      fullPath: '/app/plays'
+      preLoaderRoute: typeof AppPlaysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/app/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/evals': {
       id: '/dashboard/evals'
       path: '/evals'
       fullPath: '/dashboard/evals'
       preLoaderRoute: typeof DashboardEvalsRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/api/auth/login': {
+      id: '/api/auth/login'
+      path: '/api/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/logout': {
+      id: '/api/auth/logout'
+      path: '/api/auth/logout'
+      fullPath: '/api/auth/logout'
+      preLoaderRoute: typeof ApiAuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/me': {
+      id: '/api/auth/me'
+      path: '/api/auth/me'
+      fullPath: '/api/auth/me'
+      preLoaderRoute: typeof ApiAuthMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/register': {
+      id: '/api/auth/register'
+      path: '/api/auth/register'
+      fullPath: '/api/auth/register'
+      preLoaderRoute: typeof ApiAuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/verify-email': {
+      id: '/api/auth/verify-email'
+      path: '/api/auth/verify-email'
+      fullPath: '/api/auth/verify-email'
+      preLoaderRoute: typeof ApiAuthVerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/latch/goldens': {
       id: '/api/latch/goldens'
@@ -377,6 +669,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workspace/agents': {
+      id: '/api/workspace/agents'
+      path: '/api/workspace/agents'
+      fullPath: '/api/workspace/agents'
+      preLoaderRoute: typeof ApiWorkspaceAgentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/agents/': {
+      id: '/app/agents/'
+      path: '/app/agents'
+      fullPath: '/app/agents/'
+      preLoaderRoute: typeof AppAgentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/agents/$agentId': {
+      id: '/app/agents/$agentId'
+      path: '/app/agents/$agentId'
+      fullPath: '/app/agents/$agentId'
+      preLoaderRoute: typeof AppAgentsAgentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/oauth/google/callback': {
       id: '/api/oauth/google/callback'
       path: '/api/oauth/google/callback'
@@ -390,6 +703,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/oauth/google/start'
       preLoaderRoute: typeof ApiOauthGoogleStartRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/workspace/agents/$agentId': {
+      id: '/api/workspace/agents/$agentId'
+      path: '/$agentId'
+      fullPath: '/api/workspace/agents/$agentId'
+      preLoaderRoute: typeof ApiWorkspaceAgentsAgentIdRouteImport
+      parentRoute: typeof ApiWorkspaceAgentsRoute
     }
   }
 }
@@ -406,22 +726,48 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
+interface ApiWorkspaceAgentsRouteChildren {
+  ApiWorkspaceAgentsAgentIdRoute: typeof ApiWorkspaceAgentsAgentIdRoute
+}
+
+const ApiWorkspaceAgentsRouteChildren: ApiWorkspaceAgentsRouteChildren = {
+  ApiWorkspaceAgentsAgentIdRoute: ApiWorkspaceAgentsAgentIdRoute,
+}
+
+const ApiWorkspaceAgentsRouteWithChildren =
+  ApiWorkspaceAgentsRoute._addFileChildren(ApiWorkspaceAgentsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRouteWithChildren,
   DocsRoute: DocsRoute,
   HowItWorksRoute: HowItWorksRoute,
+  LoginRoute: LoginRoute,
   MerchRoute: MerchRoute,
   PlansRoute: PlansRoute,
   PrivacyRoute: PrivacyRoute,
+  RegisterRoute: RegisterRoute,
   ReliabilityRoute: ReliabilityRoute,
   TermsRoute: TermsRoute,
   ApiHealthRoute: ApiHealthRoute,
+  AppConnectionsRoute: AppConnectionsRoute,
+  AppEvalsRoute: AppEvalsRoute,
+  AppPlaysRoute: AppPlaysRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+  ApiAuthLoginRoute: ApiAuthLoginRoute,
+  ApiAuthLogoutRoute: ApiAuthLogoutRoute,
+  ApiAuthMeRoute: ApiAuthMeRoute,
+  ApiAuthRegisterRoute: ApiAuthRegisterRoute,
+  ApiAuthVerifyEmailRoute: ApiAuthVerifyEmailRoute,
   ApiLatchGoldensRoute: ApiLatchGoldensRoute,
   ApiLatchPlaysRoute: ApiLatchPlaysRoute,
   ApiLatchRunRoute: ApiLatchRunRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
+  ApiWorkspaceAgentsRoute: ApiWorkspaceAgentsRouteWithChildren,
+  AppAgentsAgentIdRoute: AppAgentsAgentIdRoute,
+  AppAgentsIndexRoute: AppAgentsIndexRoute,
   ApiOauthGoogleCallbackRoute: ApiOauthGoogleCallbackRoute,
   ApiOauthGoogleStartRoute: ApiOauthGoogleStartRoute,
 }

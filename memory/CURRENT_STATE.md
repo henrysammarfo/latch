@@ -1,48 +1,29 @@
 # LATCH — Current State
 
 **Updated:** 2026-09-13  
-**Branch:** `cursor/latch-empire-de86`
+**Branch:** `cursor/google-consent-pages-de86`
 
-## Live now
+## Live product shape
 
-- Cursor rules (empire core · secrets/AgentRouter · memory discipline)
-- Skills (empire-build · live-research · agentrouter-tor)
-- Memory MDs + credentials runbook + bible copy at `docs/LATCH_BIBLE.md`
-- Server: RiskCompiler · Policy · Saga+compensate · connectors (Slack/Google/Stripe) · eval G1–G4 · in-memory play store
-- API: `/api/health`, `/api/latch/run`, `/api/latch/plays`, `/api/latch/goldens`, `/api/public/stripe-webhook`
-- UI: `/dashboard` poke board
-- Scripts: `smoke:agentrouter`, `eval:goldens`, `test:unit`
-- Default mode: **`dry_run`** (fail-closed structured path)
+- Marketing: plain-language pages (`/`, `/how-it-works`, `/plans`, `/docs`, `/reliability`, `/contact`)
+- Auth: **email + password only** (`/register`, `/login`) — no Google login for accounts
+- Email verify: optional, later in `/app/settings` (token paste until SMTP)
+- App shell: `/app` overview, agents, plays, connections, evals, settings (toasts, mobile nav)
+- Legacy `/dashboard` and `/dashboard/evals` redirect into `/app`
+- Operator Google OAuth remains for Sheets/Gmail/Calendar (`/api/oauth/google/start`) — separate from signup
 
-## AgentRouter
+## Connectors
 
-- **LIVE:** `npm run smoke:agentrouter` → `{"ok":true,"model":"deepseek-v4-flash","status":200}` (2026-09-13).
-- Transport: Tor SOCKS + `node-fetch`/`socks-proxy-agent`.
-- Protocol: Anthropic `POST /v1/messages` + Claude CLI wire headers (OpenAI `/chat/completions` → false `unauthorized_client`).
-- Base: `https://agentrouter.org/v1`. LLM draft still gated by `LATCH_LLM_DRAFT=true`; risk asserts stay deterministic.
+- Slack: configured (live channel `#cs`)
+- Google: OAuth client + refresh token on Vercel; **still needs Spreadsheet ID**
+- Stripe: pending
+- AgentRouter LLM: works via Tor on Cursor Cloud
 
-## Slack
+## Blocked on owner (non-secret reply)
 
-- App **LATCH** installed on TerraSignal (`A0C1J0RTP1Q`); bot `latch_local`; token in gitignored `.env`.
-- Channel `#cs` (`C0C2CDTQSL8`) — bot is member; live `chat.postMessage` test **ok**.
-- Slack connector ready for live mode once `LATCH_MODE=live`.
-
-
-## Deploy
-
-- Vercel project `latch` created (`prj_Yu14tThFGUwsOIn8q8prf7uTbNpX`); env seeded (no Tor proxy).
-- Google OAuth start/callback routes added for production redirect.
-
-## Blocked on owner credentials
-
-See `memory/CREDENTIALS_RUNBOOK.md` — **Slack done**. Next: Google OAuth+Sheet, then Stripe test webhook.
-
-## Research keys (local .env, gitignored)
-
-- Tavily: wired for FACT_CHECK  
-- TinyFish: key validated earlier (COMPLETED run)  
-- AgentRouter: requires Tor SOCKS on Cursor Cloud; smoke script provided  
+Spreadsheet ID only — see `docs/GOOGLE_SHEET_SETUP.md`  
+Reply with the `<THIS>` from `https://docs.google.com/spreadsheets/d/<THIS>/edit`
 
 ## Security posture
 
-Fail-closed · draft-only Gmail · secrets gitignored · residual risk documented · **not** claiming unhackable.
+Fail-closed · Gmail draft-only · secrets gitignored · residual risk documented · **not** claiming unhackable.
