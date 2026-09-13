@@ -61,3 +61,9 @@
 - Root meta: Latch title/description/author, full Open Graph + Twitter cards, canonical, favicon.svg/ico, apple-touch-icon.
 - Added `public/og.jpg` (1200×630), `public/og.png`, sitemap, robots.
 - No "tabicom" traces found in repo.
+
+## 2026-09-13 — Google Sheet ID wired
+
+- Owner provided Spreadsheet ID `1vRHFoXxRyKbrC8KLk3Or3-EDjTex8-zpdYA9UcsmFIA`.
+- Set `GOOGLE_SHEETS_SPREADSHEET_ID` on Vercel (prod/preview/dev) + local `.env`.
+- Redeployed; `/api/health` Google → `configured: true`, detail `oauth+sheet present`.

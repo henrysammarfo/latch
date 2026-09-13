@@ -47,3 +47,7 @@ Labels: **VERIFIED** · **DIRECTIONAL** · **UNVERIFIED**
 - VERIFIED in code: signup is email/password; Google OAuth is operator-only for Sheets/Gmail/Calendar.
 - VERIFIED: Gmail path remains draft-only in saga connectors.
 - PENDING owner: `GOOGLE_SHEETS_SPREADSHEET_ID` before Google connector shows configured.
+
+## 2026-09-13 — Google configured
+
+- VERIFIED: `/api/health` on latch.tryopal.asia returns Google `configured: true` after Spreadsheet ID env set.
