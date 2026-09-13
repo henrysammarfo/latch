@@ -1,0 +1,26 @@
+---
+description: LATCH Empire core — fail-closed churn-save saga canon from the bible
+alwaysApply: true
+---
+
+# LATCH Empire Core
+
+LATCH is a fail-closed churn-save orchestration engine. Architecture docs and `docs/LATCH_BIBLE.md` are binding.
+
+## Non-negotiables
+
+- **No mocks / no fake greens / no silent fallbacks.** Missing credentials → refuse the run with a clear error.
+- **Saga + compensation.** Side effects (Slack, Sheets, Calendar, Gmail draft) must reverse or mark `FAILED_*` on failure; board shows `RED UNLATCHED`.
+- **Draft-only Gmail.** Never auto-send customer email. Human owns outbound.
+- **Side-effect proof.** Every successful step stores a real external ID; asserts check IDs, not vibes.
+- **Idempotency.** `idempotency_key = hash(trigger_id)`; replays must not double-post Slack.
+- **Dual mode.** `dry_run` vs `live` is policy, not a mock layer. Dry-run still records structured traces without claiming live IDs.
+- **Honesty.** Never claim unhackable. Document residual risk. Label claims VERIFIED / DIRECTIONAL / UNVERIFIED.
+
+## Naming
+
+- Files: kebab-case · functions: camelCase · types/components: PascalCase
+
+## When stuck
+
+Stop and ask rather than inventing integrations or fake success.

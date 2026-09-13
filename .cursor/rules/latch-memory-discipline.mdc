@@ -1,0 +1,19 @@
+---
+description: Keep LATCH memory MDs current; no hallucinations; label evidence
+alwaysApply: true
+---
+
+# LATCH Memory Discipline
+
+On material product/code/docs/research changes, update:
+
+1. `memory/CURRENT_STATE.md` — what is live vs missing
+2. `memory/SESSION_LOG.md` — append dated entry
+3. `memory/FACT_CHECK.md` — claims with URL + VERIFIED / DIRECTIONAL / UNVERIFIED
+
+Rules:
+
+- Prefer live Tavily / TinyFish / AgentRouter research over assumptions.
+- Never invent judge names, prize amounts, or API behaviors.
+- Bible lives at `docs/LATCH_BIBLE.md` — do not fork conflicting satellite docs.
+- Credentials how-to: `memory/CREDENTIALS_RUNBOOK.md` (no secret values).
