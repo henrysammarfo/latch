@@ -21,6 +21,11 @@
 - Protocol: Anthropic `POST /v1/messages` + Claude CLI wire headers (OpenAI `/chat/completions` → false `unauthorized_client`).
 - Base: `https://agentrouter.org/v1`. LLM draft still gated by `LATCH_LLM_DRAFT=true`; risk asserts stay deterministic.
 
+## Slack
+
+- App **LATCH** installed on TerraSignal (`A0C1J0RTP1Q`); bot user `latch_local`; `SLACK_BOT_TOKEN` in gitignored `.env`.
+- Still need `#cs` channel invite + `SLACK_CS_CHANNEL_ID`.
+
 ## Blocked on owner credentials
 
 See `memory/CREDENTIALS_RUNBOOK.md` — Slack bot, Google OAuth+Sheet, Stripe test webhook. Until then live side-effect IDs will not appear (by design).

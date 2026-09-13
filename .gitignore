@@ -41,3 +41,6 @@ memory/SECRETS.local.md
 *.pem
 credentials.json
 token.json
+
+# Local Slack CLI scaffold (install/auth only — not the Empire app)
+latch-cs/

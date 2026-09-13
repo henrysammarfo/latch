@@ -31,3 +31,7 @@
 - Matrix: `agentrouter.org/v1` Tor → C on `/chat/completions`; direct → WAF A; `co.agentrouter.org/v1` → D Invalid API Key; other hosts ENOTFOUND/404.
 - Root cause: AgentRouter rejects generic OpenAI clients; Claude-Code Anthropic `/v1/messages` + CLI headers works with same key.
 - Client switched to `POST {base}/messages`; smoke **OK** `deepseek-v4-flash` status 200. Goldens/unit/typecheck green.
+## 2026-09-13 — Slack CLI connected
+
+- `slack auth login` completed; app **LATCH** installed (local) on TerraSignal.
+- Bot token written to `.env` only (auth.test ok). Awaiting channel ID + invite.
