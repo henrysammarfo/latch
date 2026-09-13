@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="https://latch.tryopal.asia"><img src="https://img.shields.io/badge/Live-latch.tryopal.asia-7CFFB2?style=for-the-badge&logo=vercel&logoColor=black" alt="Live site" /></a>
+  <a href="https://cap.so/s/41z8m03peq9hez2"><img src="https://img.shields.io/badge/Demo-video-FF5A5F?style=for-the-badge&logo=youtube&logoColor=white" alt="Demo video" /></a>
   <a href="https://latch.tryopal.asia/api/health"><img src="https://img.shields.io/badge/Health-ok-22C55E?style=for-the-badge" alt="Health" /></a>
   <a href="https://latch.tryopal.asia/diagrams"><img src="https://img.shields.io/badge/Diagrams-Excalidraw-111827?style=for-the-badge" alt="Diagrams" /></a>
   <a href="./memory/CREDENTIALS_RUNBOOK.md"><img src="https://img.shields.io/badge/Runbook-Credentials-0A0A0A?style=for-the-badge" alt="Credentials runbook" /></a>
@@ -22,6 +23,8 @@
 </p>
 
 **Production:** https://latch.tryopal.asia · **App:** https://latch.tryopal.asia/app · **Diagrams:** https://latch.tryopal.asia/diagrams · **Health:** https://latch.tryopal.asia/api/health
+
+**Demo video:** https://cap.so/s/41z8m03peq9hez2
 
 > When a customer looks ready to churn, **LATCH** runs a fail-closed save play across Slack, Sheets, Calendar, and a Gmail **draft** — and only greens when every side-effect is proven with an ID (or compensates cleanly and goes `UNLATCHED`).
 
