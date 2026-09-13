@@ -16,7 +16,9 @@ import { Route as DocsRouteImport } from './routes/docs'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as MerchRouteImport } from './routes/merch'
 import { Route as PlansRouteImport } from './routes/plans'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReliabilityRouteImport } from './routes/reliability'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as DashboardEvalsRouteImport } from './routes/dashboard/evals'
 import { Route as ApiLatchGoldensRouteImport } from './routes/api/latch/goldens'
@@ -61,9 +63,19 @@ const PlansRoute = PlansRouteImport.update({
   path: '/plans',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReliabilityRoute = ReliabilityRouteImport.update({
   id: '/reliability',
   path: '/reliability',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiHealthRoute = ApiHealthRouteImport.update({
@@ -115,7 +127,9 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
+  '/privacy': typeof PrivacyRoute
   '/reliability': typeof ReliabilityRoute
+  '/terms': typeof TermsRoute
   '/api/health': typeof ApiHealthRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
   '/api/latch/goldens': typeof ApiLatchGoldensRoute
@@ -133,7 +147,9 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
+  '/privacy': typeof PrivacyRoute
   '/reliability': typeof ReliabilityRoute
+  '/terms': typeof TermsRoute
   '/api/health': typeof ApiHealthRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
   '/api/latch/goldens': typeof ApiLatchGoldensRoute
@@ -152,7 +168,9 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/merch': typeof MerchRoute
   '/plans': typeof PlansRoute
+  '/privacy': typeof PrivacyRoute
   '/reliability': typeof ReliabilityRoute
+  '/terms': typeof TermsRoute
   '/api/health': typeof ApiHealthRoute
   '/dashboard/evals': typeof DashboardEvalsRoute
   '/api/latch/goldens': typeof ApiLatchGoldensRoute
@@ -172,7 +190,9 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/merch'
     | '/plans'
+    | '/privacy'
     | '/reliability'
+    | '/terms'
     | '/api/health'
     | '/dashboard/evals'
     | '/api/latch/goldens'
@@ -190,7 +210,9 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/merch'
     | '/plans'
+    | '/privacy'
     | '/reliability'
+    | '/terms'
     | '/api/health'
     | '/dashboard/evals'
     | '/api/latch/goldens'
@@ -208,7 +230,9 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/merch'
     | '/plans'
+    | '/privacy'
     | '/reliability'
+    | '/terms'
     | '/api/health'
     | '/dashboard/evals'
     | '/api/latch/goldens'
@@ -227,7 +251,9 @@ export interface RootRouteChildren {
   HowItWorksRoute: typeof HowItWorksRoute
   MerchRoute: typeof MerchRoute
   PlansRoute: typeof PlansRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReliabilityRoute: typeof ReliabilityRoute
+  TermsRoute: typeof TermsRoute
   ApiHealthRoute: typeof ApiHealthRoute
   ApiLatchGoldensRoute: typeof ApiLatchGoldensRoute
   ApiLatchPlaysRoute: typeof ApiLatchPlaysRoute
@@ -288,11 +314,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlansRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reliability': {
       id: '/reliability'
       path: '/reliability'
       fullPath: '/reliability'
       preLoaderRoute: typeof ReliabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/health': {
@@ -374,7 +414,9 @@ const rootRouteChildren: RootRouteChildren = {
   HowItWorksRoute: HowItWorksRoute,
   MerchRoute: MerchRoute,
   PlansRoute: PlansRoute,
+  PrivacyRoute: PrivacyRoute,
   ReliabilityRoute: ReliabilityRoute,
+  TermsRoute: TermsRoute,
   ApiHealthRoute: ApiHealthRoute,
   ApiLatchGoldensRoute: ApiLatchGoldensRoute,
   ApiLatchPlaysRoute: ApiLatchPlaysRoute,
